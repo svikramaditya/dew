@@ -34,7 +34,8 @@
     "typography": "Typography",
     "shape": "Shape",
     "animations": "Animations",
-    "hero": "Hero"
+    "hero": "Hero",
+    "featured_collection": "Featured collection"
   },
   "labels": {
     "alignment": "Alignment",
@@ -76,7 +77,14 @@
     "link": "Link",
     "link_label": "Link text",
     "button_label": "Button label",
-    "button_link": "Button link"
+    "button_link": "Button link",
+    "collection": "Collection",
+    "products_to_show": "Products to show",
+    "columns_desktop": "Columns on desktop",
+    "quantity": "Quantity",
+    "variant": "Variant",
+    "add_to_cart": "Add to cart",
+    "sold_out": "Sold out"
   },
   "options": {
     "alignment": {

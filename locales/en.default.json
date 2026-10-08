@@ -5,6 +5,7 @@
     "search": "Search",
     "account": "Account",
     "cart": "Cart",
+    "product": "Product",
     "newsletter": {
       "email_placeholder": "Your email",
       "submit": "Subscribe",
@@ -60,5 +61,11 @@
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "labels": {
+    "variant": "Variant",
+    "quantity": "Quantity",
+    "add_to_cart": "Add to cart",
+    "sold_out": "Sold out"
   }
 }

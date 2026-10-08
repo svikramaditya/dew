@@ -4,47 +4,218 @@
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/product
 {% endcomment %}
+{%- liquid
+  assign loading_strategy = 'lazy'
+  unless settings.enable_lazy_loading
+    assign loading_strategy = 'eager'
+  endunless
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+<div class="product color-{{ section.settings.color_scheme }} full-width">
+  <div class="product__inner">
+    <div class="product__media">
+      {%- if product.images.size > 0 -%}
+        <div class="product__media-main">
+          {{
+            product.featured_image
+            | image_url: width: 1200
+            | image_tag: widths: '600,900,1200', sizes: '(min-width: 900px) 50vw, 100vw', loading: loading_strategy, alt: product.featured_image.alt | default: product.title, class: 'product__image'
+          }}
+        </div>
+        {%- if product.images.size > 1 -%}
+          <div class="product__thumbnails">
+            {%- for image in product.images -%}
+              <span class="product__thumbnail">
+                {{ image | image_url: width: 200 | image_tag: alt: image.alt | default: product.title }}
+              </span>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg product__image' }}
+      {%- endif -%}
+    </div>
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
+    <div class="product__info">
+      <h1 class="product__title">{{ product.title }}</h1>
+      <p class="product__price">
+        {{ current_variant.price | money }}
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <s class="product__price-compare">{{ current_variant.compare_at_price | money }}</s>
+        {%- endif -%}
+      </p>
+
+      {%- if product.description != blank -%}
+        <div class="product__description">{{ product.description }}</div>
+      {%- endif -%}
+
+      {% form 'product', product, class: 'product__form' %}
+        {%- if product.has_only_default_variant == false -%}
+          <label class="product__label" for="ProductVariant-{{ section.id }}">{{ 'labels.variant' | t }}</label>
+          <select class="product__variant-select" name="id" id="ProductVariant-{{ section.id }}">
+            {%- for variant in product.variants -%}
+              <option
+                value="{{ variant.id }}"
+                {% if variant == current_variant %}selected="selected"{% endif %}
+                {% unless variant.available %}disabled{% endunless %}
+              >
+                {{ variant.title }} - {{ variant.price | money }}
+              </option>
+            {%- endfor -%}
+          </select>
+        {%- else -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+        {%- endif -%}
+
+        <label class="product__label" for="Quantity-{{ section.id }}">{{ 'labels.quantity' | t }}</label>
+        <input class="product__quantity" type="number" name="quantity" id="Quantity-{{ section.id }}" min="1" value="1">
+
+        <button type="submit" class="product__button" {% unless current_variant.available %}disabled{% endunless %}>
+          {%- if current_variant.available -%}
+            {{ 'labels.add_to_cart' | t }}
+          {%- else -%}
+            {{ 'labels.sold_out' | t }}
+          {%- endif -%}
+        </button>
+        {{ form | payment_button }}
+      {% endform %}
+    </div>
+  </div>
 </div>
 
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
+{% stylesheet %}
+  .product__inner {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: var(--section-spacing) var(--page-margin);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
 
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
+  @media screen and (min-width: 900px) {
+    .product__inner {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+  }
 
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
+  .product__media-main {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    background: color-mix(in srgb, var(--color-border) 40%, transparent);
+  }
 
-    <input type="text" name="quantity" min="1" value="1">
+  .product__image,
+  .product__media-main svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
-</div>
+  .product__thumbnails {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .product__thumbnail {
+    display: block;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: var(--radius-input);
+    overflow: hidden;
+    border: var(--border-thickness) solid var(--color-border);
+  }
+
+  .product__thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product__title {
+    font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.3rem);
+    line-height: 1.12;
+    margin: 0 0 0.75rem;
+  }
+
+  .product__price {
+    font-size: 1.15rem;
+    margin: 0 0 1.5rem;
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+  }
+
+  .product__price-compare {
+    opacity: 0.55;
+    font-size: 0.95rem;
+  }
+
+  .product__description {
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.85;
+    margin-bottom: 2rem;
+    max-width: 34rem;
+  }
+
+  .product__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 24rem;
+  }
+
+  .product__label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.65;
+    margin-top: 0.75rem;
+  }
+
+  .product__variant-select,
+  .product__quantity {
+    padding: 0.7rem 0.9rem;
+    border: var(--border-thickness) solid var(--color-border);
+    border-radius: var(--radius-input);
+    background: var(--color-background);
+    color: var(--color-text);
+  }
+
+  .product__button {
+    margin-top: 1.5rem;
+    padding: 0.95rem 1.6rem;
+    border: none;
+    border-radius: var(--radius-button);
+    background: var(--color-button);
+    color: var(--color-button-label);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+  }
+
+  .product__button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.product",
-  "settings": [],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
   "disabled_on": {
     "groups": ["header", "footer"]
   }

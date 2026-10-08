@@ -5,9 +5,23 @@
       "settings": {
         "image": "shopify://shop_images/dew-hero.jpg"
       }
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "heading": "The routine",
+        "description": "Six steps, built to be used in order -- or picked apart and used alone.",
+        "collection": "all",
+        "products_to_show": 6,
+        "columns_desktop": "3",
+        "button_label": "View all",
+        "button_link": "/collections/all"
+      }
     }
   },
   "order": [
-    "hero"
+    "hero",
+    "featured-collection"
   ]
 }

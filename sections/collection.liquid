@@ -4,44 +4,152 @@
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
+{%- liquid
+  assign loading_strategy = 'lazy'
+  unless settings.enable_lazy_loading
+    assign loading_strategy = 'eager'
+  endunless
+-%}
+<div class="collection color-{{ section.settings.color_scheme }} full-width">
+  <div class="collection__inner">
+    <h1 class="collection__title">{{ collection.title }}</h1>
+    {%- if collection.description != blank -%}
+      <div class="collection__description">{{ collection.description }}</div>
+    {%- endif -%}
 
-<h1>{{ collection.title }}</h1>
+    {% paginate collection.products by 24 %}
+      <ul class="collection__grid">
+        {%- for product in collection.products -%}
+          <li class="product-card">
+            <a href="{{ product.url }}" class="product-card__link">
+              <span class="product-card__media">
+                {%- if product.featured_image != blank -%}
+                  {{
+                    product.featured_image
+                    | image_url: width: 800
+                    | image_tag: widths: '400,600,800', sizes: '(min-width: 900px) 25vw, 50vw', loading: loading_strategy, alt: product.featured_image.alt | default: product.title, class: 'product-card__image'
+                  }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg product-card__image' }}
+                {%- endif -%}
+              </span>
+              <span class="product-card__content">
+                <span class="product-card__title">{{ product.title }}</span>
+                <span class="product-card__price">{{ product.price | money }}</span>
+              </span>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
 
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
-      </div>
-    {% endfor %}
-
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
+      {%- if paginate.pages > 1 -%}
+        <div class="collection__pagination">{{ paginate | default_pagination }}</div>
+      {%- endif -%}
+    {% endpaginate %}
+  </div>
 </div>
 
 {% stylesheet %}
-  .collection-products {
+  .collection__inner {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: var(--section-spacing) var(--page-margin);
+  }
+
+  .collection__title {
+    font-size: clamp(1.8rem, 1.4rem + 1.6vw, 2.8rem);
+    margin: 0 0 0.75rem;
+  }
+
+  .collection__description {
+    font-size: 1rem;
+    opacity: 0.75;
+    max-width: 34rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .collection__grid {
+    list-style: none;
+    margin: 2.5rem 0 0;
+    padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--grid-gap);
+  }
+
+  @media screen and (min-width: 700px) {
+    .collection__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .product-card {
+    list-style: none;
+  }
+
+  .product-card__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .product-card__media {
+    display: block;
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    background: color-mix(in srgb, var(--color-border) 40%, transparent);
+  }
+
+  .product-card__image,
+  .product-card__media svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .product-card__link:hover .product-card__image {
+    transform: scale(1.04);
+  }
+
+  .product-card__content {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.9rem;
+  }
+
+  .product-card__title {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .product-card__price {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    white-space: nowrap;
+  }
+
+  .collection__pagination {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.collection",
-  "settings": []
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-1"
+    }
+  ]
 }
 {% endschema %}
