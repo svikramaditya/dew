@@ -31,7 +31,10 @@
     "sidebar": "Sidebar",
     "text": "Text",
     "theme": "Theme",
-    "typography": "Typography"
+    "typography": "Typography",
+    "shape": "Shape",
+    "animations": "Animations",
+    "hero": "Hero"
   },
   "labels": {
     "alignment": "Alignment",
@@ -47,7 +50,33 @@
     "page_width": "Page width",
     "show_payment_icons": "Show payment icons",
     "text_style": "Text style",
-    "text": "Text"
+    "text": "Text",
+    "primary_font": "Primary font",
+    "heading_font": "Heading font",
+    "scale": "Scale",
+    "body_scale": "Body text scale",
+    "heading_scale": "Heading scale",
+    "section_spacing": "Section spacing",
+    "button_corner_radius": "Button corner radius",
+    "card_corner_radius": "Card corner radius",
+    "border_thickness": "Border thickness",
+    "color_schemes_info": "Each scheme below can be applied per-section from that section's settings.",
+    "color_scheme": "Color scheme",
+    "border": "Border",
+    "button_background": "Button background",
+    "button_text": "Button text",
+    "enable_scroll_animations": "Enable scroll animations",
+    "enable_lazy_loading": "Enable lazy loading",
+    "heading": "Heading",
+    "subheading": "Subheading",
+    "description": "Description",
+    "eyebrow": "Eyebrow text",
+    "image": "Image",
+    "video": "Video",
+    "link": "Link",
+    "link_label": "Link text",
+    "button_label": "Button label",
+    "button_link": "Button link"
   },
   "options": {
     "alignment": {
@@ -61,6 +90,7 @@
     },
     "page_width": {
       "narrow": "Narrow",
+      "medium": "Medium",
       "wide": "Wide"
     },
     "size": {
@@ -71,6 +101,6 @@
       "title": "Title",
       "subtitle": "Subtitle",
       "normal": "Normal text"
-    },
+    }
   }
 }

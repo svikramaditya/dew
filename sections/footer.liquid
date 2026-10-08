@@ -1,39 +1,190 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
-  </div>
+<footer class="footer color-{{ section.settings.color_scheme }} full-width">
+  <div class="footer__inner">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="{{ routes.root_url }}" class="footer__logo">{{ shop.name }}</a>
+        {%- if section.settings.tagline != blank -%}
+          <p class="footer__tagline">{{ section.settings.tagline }}</p>
+        {%- endif -%}
+      </div>
 
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
+      <div class="footer__column">
+        <p class="footer__heading">{{ 'general.menu' | t }}</p>
+        <ul class="footer__links">
+          {%- for link in section.settings.menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
 
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
-    {% endif %}
+      <div class="footer__column footer__newsletter">
+        {%- if section.settings.newsletter_heading != blank -%}
+          <p class="footer__heading">{{ section.settings.newsletter_heading }}</p>
+        {%- endif -%}
+        {% form 'customer', class: 'footer__newsletter-form' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <label class="visually-hidden" for="Footer-Newsletter-{{ section.id }}">{{ 'general.newsletter.email_placeholder' | t }}</label>
+          <input
+            type="email"
+            name="contact[email]"
+            id="Footer-Newsletter-{{ section.id }}"
+            placeholder="{{ 'general.newsletter.email_placeholder' | t }}"
+            required
+          >
+          <button type="submit">{{ 'general.newsletter.submit' | t }}</button>
+          {%- if form.posted_successfully? -%}
+            <p class="footer__newsletter-success">{{ 'general.newsletter.success' | t }}</p>
+          {%- endif -%}
+        {% endform %}
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copyright">
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}, {{ powered_by_link }}
+      </p>
+
+      {%- if shop.policies.size > 0 -%}
+        <ul class="footer__policies">
+          {%- for policy in shop.policies -%}
+            <li><a href="{{ policy.url }}">{{ policy.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if section.settings.show_payment_icons -%}
+        <div class="footer__payment">
+          {%- for type in shop.enabled_payment_types -%}
+            {{ type | payment_type_svg_tag }}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
   </div>
 </footer>
 
 {% stylesheet %}
-  footer {
+  .footer__inner {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: var(--section-spacing) var(--page-margin) 2rem;
+  }
+
+  .footer__top {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.2fr;
+    gap: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: var(--border-thickness) solid var(--color-border);
+  }
+
+  @media screen and (max-width: 749px) {
+    .footer__top {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  .footer__logo {
+    font-family: var(--font-heading--family);
+    font-weight: 600;
+    font-size: 1.3rem;
+    text-decoration: none;
+    color: var(--color-text);
+  }
+
+  .footer__tagline {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    opacity: 0.75;
+    max-width: 22rem;
+  }
+
+  .footer__heading {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 1rem;
+    opacity: 0.65;
+  }
+
+  .footer__links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .footer__links a {
+    text-decoration: none;
+    color: var(--color-text);
+    font-size: 0.9rem;
+  }
+
+  .footer__newsletter-form {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .footer__newsletter-form input {
+    flex: 1;
+    padding: 0.65rem 0.9rem;
+    border: var(--border-thickness) solid var(--color-border);
+    border-radius: var(--radius-input);
+    background: transparent;
+    color: var(--color-text);
+  }
+
+  .footer__newsletter-form button {
+    padding: 0.65rem 1.2rem;
+    border: none;
+    border-radius: var(--radius-button);
+    background: var(--color-button);
+    color: var(--color-button-label);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .footer__newsletter-success {
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .footer__bottom {
     display: flex;
     justify-content: space-between;
-    margin-top: 2rem;
-  }
-  footer a {
-    text-decoration: none;
-    color: var(--color-foreground);
-  }
-  footer .footer__links,
-  footer .footer__payment {
-    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 1rem;
+    padding-top: 1.75rem;
+    font-size: 0.82rem;
+    opacity: 0.7;
+  }
+
+  .footer__policies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .footer__policies a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .footer__payment {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .footer__payment svg {
+    height: 1.3rem;
+    width: auto;
   }
 {% endstylesheet %}
 
@@ -42,9 +193,27 @@
   "name": "t:general.footer",
   "settings": [
     {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "t:labels.description"
+    },
+    {
       "type": "link_list",
       "id": "menu",
-      "label": "t:labels.menu"
+      "label": "t:labels.menu",
+      "default": "footer"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "t:labels.heading",
+      "default": "Join the list"
     },
     {
       "type": "checkbox",

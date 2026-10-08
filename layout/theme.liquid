@@ -14,10 +14,16 @@
   </head>
 
   <body>
+    <a href="#MainContent" class="skip-to-content">{{ 'general.skip_to_content' | t }}</a>
+
     {% sections 'header-group' %}
 
-    {{ content_for_layout }}
+    <main id="MainContent">
+      {{ content_for_layout }}
+    </main>
 
     {% sections 'footer-group' %}
+
+    <script src="{{ 'component-scroll-animate.js' | asset_url }}" defer="defer"></script>
   </body>
 </html>

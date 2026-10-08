@@ -1,4 +1,16 @@
 {
+  "general": {
+    "skip_to_content": "Skip to content",
+    "menu": "Menu",
+    "search": "Search",
+    "account": "Account",
+    "cart": "Cart",
+    "newsletter": {
+      "email_placeholder": "Your email",
+      "submit": "Subscribe",
+      "success": "Thank you for subscribing."
+    }
+  },
   "404": {
     "title": "404",
     "not_found": "Page not found.",
