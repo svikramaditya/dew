@@ -23,7 +23,7 @@
       {
         "type": "font_picker",
         "id": "type_heading_font",
-        "default": "spectral_n4",
+        "default": "ebgaramond_n4",
         "label": "t:labels.heading_font"
       },
       {
