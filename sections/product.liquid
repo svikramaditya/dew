@@ -15,18 +15,20 @@
   <div class="product__inner">
     <div class="product__media">
       {%- if product.images.size > 0 -%}
+        {%- assign featured_alt = product.featured_image.alt | default: product.title -%}
         <div class="product__media-main">
           {{
             product.featured_image
             | image_url: width: 1200
-            | image_tag: widths: '600,900,1200', sizes: '(min-width: 900px) 50vw, 100vw', loading: loading_strategy, alt: product.featured_image.alt | default: product.title, class: 'product__image'
+            | image_tag: widths: '600,900,1200', sizes: '(min-width: 900px) 50vw, 100vw', loading: loading_strategy, alt: featured_alt, class: 'product__image'
           }}
         </div>
         {%- if product.images.size > 1 -%}
           <div class="product__thumbnails">
             {%- for image in product.images -%}
+              {%- assign thumb_alt = image.alt | default: product.title -%}
               <span class="product__thumbnail">
-                {{ image | image_url: width: 200 | image_tag: alt: image.alt | default: product.title }}
+                {{ image | image_url: width: 200 | image_tag: alt: thumb_alt }}
               </span>
             {%- endfor -%}
           </div>
