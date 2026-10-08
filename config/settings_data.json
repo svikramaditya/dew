@@ -12,7 +12,7 @@
   "presets": {
     "Dew": {
       "type_primary_font": "karla_n4",
-      "type_heading_font": "assistant_n4",
+      "type_heading_font": "playfair_display_n4",
       "body_scale": 100,
       "heading_scale": 100,
       "max_page_width": "82rem",

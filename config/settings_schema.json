@@ -23,7 +23,7 @@
       {
         "type": "font_picker",
         "id": "type_heading_font",
-        "default": "assistant_n4",
+        "default": "playfair_display_n4",
         "label": "t:labels.heading_font"
       },
       {
