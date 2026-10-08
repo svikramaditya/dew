@@ -168,9 +168,9 @@ class WaterRipple extends HTMLElement {
         float heightUp = texture2D(uHeightField, vUv + vec2(0.0, uTexel.y)).r;
         float heightDown = texture2D(uHeightField, vUv - vec2(0.0, uTexel.y)).r;
         vec2 gradient = vec2(heightRight - heightLeft, heightUp - heightDown);
-        vec2 distortedUv = vUv + gradient * 3.5;
+        vec2 distortedUv = vUv + gradient * 0.6;
         vec4 color = texture2D(uImage, clamp(distortedUv, 0.0, 1.0));
-        float shade = 1.0 + gradient.x * 8.0 - gradient.y * 8.0;
+        float shade = 1.0 + gradient.x * 0.9 - gradient.y * 0.9;
         gl_FragColor = vec4(color.rgb * shade, 1.0);
       }
     `;
@@ -261,11 +261,11 @@ class WaterRipple extends HTMLElement {
       const dy = event.clientY - this.lastPointer.y;
       const speed = Math.sqrt(dx * dx + dy * dy);
       this.lastPointer = { x: event.clientX, y: event.clientY };
-      if (speed > 2) stamp(event.clientX, event.clientY, Math.min(speed * 0.004, 0.09));
+      if (speed > 2) stamp(event.clientX, event.clientY, Math.min(speed * 0.0025, 0.05));
     });
 
     this.addEventListener('pointerdown', (event) => {
-      stamp(event.clientX, event.clientY, 0.22);
+      stamp(event.clientX, event.clientY, 0.14);
     });
 
     this.addEventListener('pointerleave', () => {
@@ -308,14 +308,22 @@ class WaterRipple extends HTMLElement {
       this.swapBuffers();
     }
 
-    gl.bindFramebuffer(gl.FRAMEBUFFER, this.current.framebuffer);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, this.previous.texture);
-    gl.useProgram(this.updateProgram);
-    gl.uniform1i(gl.getUniformLocation(this.updateProgram, 'uHeightField'), 0);
-    gl.uniform2fv(gl.getUniformLocation(this.updateProgram, 'uTexel'), this.texel);
-    this.drawQuad(this.updateProgram);
-    this.swapBuffers();
+    // Run several physics steps per rendered frame: a single step only
+    // propagates the wave one texel per frame, which reads as a static
+    // smudge rather than a spreading ripple at real canvas sizes. This
+    // discrete scheme is already at its maximum stable speed (one texel
+    // per step), so sub-stepping -- not a larger coefficient -- is what
+    // makes the ring visibly expand within a human-perceptible timeframe.
+    for (let i = 0; i < 3; i += 1) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, this.current.framebuffer);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, this.previous.texture);
+      gl.useProgram(this.updateProgram);
+      gl.uniform1i(gl.getUniformLocation(this.updateProgram, 'uHeightField'), 0);
+      gl.uniform2fv(gl.getUniformLocation(this.updateProgram, 'uTexel'), this.texel);
+      this.drawQuad(this.updateProgram);
+      this.swapBuffers();
+    }
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, this.canvas.width, this.canvas.height);
