@@ -3,7 +3,7 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "image": "dew-hero.jpg"
+        "image": "shopify://shop_images/dew-hero.jpg"
       }
     }
   },
