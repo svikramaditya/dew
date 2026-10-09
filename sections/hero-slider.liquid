@@ -1,0 +1,408 @@
+{%- comment -%}
+  Merchant-configurable hero slider. Each slide is a block (image or video,
+  text, two buttons). Transition style (fade/slide) and autoplay timing are
+  theme-editor settings, not hardcoded, so this section stays reusable
+  across different homepage directions without touching code.
+{%- endcomment -%}
+{%- liquid
+  assign loading_strategy = 'lazy'
+  unless settings.enable_lazy_loading
+    assign loading_strategy = 'eager'
+  endunless
+-%}
+<hero-slider
+  class="hero-slider full-width"
+  data-transition="{{ section.settings.transition_style }}"
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-interval="{{ section.settings.slide_interval | times: 1000 }}"
+>
+  <div class="hero-slider__track">
+    {%- for block in section.blocks -%}
+      <div class="hero-slider__slide color-{{ block.settings.color_scheme }}{% if forloop.first %} is-active{% endif %}" data-hero-slide {{ block.shopify_attributes }}>
+        <div class="hero-slider__media">
+          {%- if block.settings.media_type == 'video' and block.settings.video != blank -%}
+            {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, class: 'hero-slider__video' }}
+          {%- elsif block.settings.enable_ripple and block.settings.image != blank -%}
+            <water-ripple class="hero-slider__ripple">
+              {{
+                block.settings.image
+                | image_url: width: 1600
+                | image_tag: widths: '800,1200,1600', sizes: '(min-width: 900px) 50vw, 100vw', loading: loading_strategy, alt: block.settings.heading, class: 'hero-slider__image'
+              }}
+            </water-ripple>
+          {%- elsif block.settings.image != blank -%}
+            {{
+              block.settings.image
+              | image_url: width: 1600
+              | image_tag: widths: '800,1200,1600', sizes: '(min-width: 900px) 50vw, 100vw', loading: loading_strategy, alt: block.settings.heading, class: 'hero-slider__image'
+            }}
+          {%- else -%}
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg hero-slider__image' }}
+          {%- endif -%}
+        </div>
+
+        <div class="hero-slider__content">
+          {%- if block.settings.eyebrow != blank -%}
+            <p class="hero-slider__eyebrow">{{ block.settings.eyebrow }}</p>
+          {%- endif -%}
+          {%- if block.settings.heading != blank -%}
+            <h2 class="hero-slider__heading">{{ block.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if block.settings.description != blank -%}
+            <p class="hero-slider__description">{{ block.settings.description }}</p>
+          {%- endif -%}
+          <div class="hero-slider__actions">
+            {%- if block.settings.button_label != blank -%}
+              <a href="{{ block.settings.button_link | default: '#' }}" class="hero-slider__button hero-slider__button--primary">
+                {{ block.settings.button_label }}
+              </a>
+            {%- endif -%}
+            {%- if block.settings.secondary_button_label != blank -%}
+              <a href="{{ block.settings.secondary_button_link | default: '#' }}" class="hero-slider__button hero-slider__button--secondary">
+                {{ block.settings.secondary_button_label }}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if section.blocks.size > 1 -%}
+    <div class="hero-slider__dots" data-hero-dots>
+      {%- for block in section.blocks -%}
+        <button type="button" class="hero-slider__dot{% if forloop.first %} is-active{% endif %}" data-hero-dot="{{ forloop.index0 }}" aria-label="Slide {{ forloop.index }}"></button>
+      {%- endfor -%}
+    </div>
+    <button type="button" class="hero-slider__arrow hero-slider__arrow--prev" data-hero-prev aria-label="Previous slide">{{ 'icon-chevron-down.svg' | inline_asset_content }}</button>
+    <button type="button" class="hero-slider__arrow hero-slider__arrow--next" data-hero-next aria-label="Next slide">{{ 'icon-chevron-down.svg' | inline_asset_content }}</button>
+  {%- endif -%}
+</hero-slider>
+
+{% if section.blocks.size > 0 %}
+  <script src="{{ 'component-water-ripple.js' | asset_url }}" defer="defer"></script>
+{% endif %}
+<script src="{{ 'component-hero-slider.js' | asset_url }}" defer="defer"></script>
+
+{% stylesheet %}
+  .hero-slider {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-slider__track {
+    position: relative;
+    display: flex;
+    width: 100%;
+    will-change: transform;
+  }
+
+  .hero-slider[data-transition='fade'] .hero-slider__track {
+    display: block;
+  }
+
+  .hero-slider__slide {
+    position: relative;
+    flex: 0 0 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    min-height: 32rem;
+  }
+
+  .hero-slider[data-transition='fade'] .hero-slider__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+    pointer-events: none;
+  }
+
+  .hero-slider[data-transition='fade'] .hero-slider__slide.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    position: relative;
+  }
+
+  .hero-slider[data-transition='slide'] .hero-slider__track {
+    transition: transform 0.6s ease;
+  }
+
+  @media screen and (min-width: 900px) {
+    .hero-slider__slide {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .hero-slider__media {
+    position: relative;
+    grid-row: 1;
+    aspect-ratio: 4 / 3;
+  }
+
+  @media screen and (min-width: 900px) {
+    .hero-slider__media {
+      aspect-ratio: auto;
+      height: 100%;
+      min-height: 32rem;
+    }
+  }
+
+  .hero-slider__image,
+  .hero-slider__video,
+  .hero-slider__ripple,
+  .hero-slider__media svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-slider__ripple {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-slider__content {
+    grid-row: 2;
+    padding: 2.5rem var(--page-margin);
+    max-width: 36rem;
+  }
+
+  @media screen and (min-width: 900px) {
+    .hero-slider__content {
+      grid-row: 1;
+      padding: 2.5rem min(4rem, var(--page-margin));
+      justify-self: center;
+    }
+  }
+
+  .hero-slider__eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.78rem;
+    opacity: 0.65;
+    margin: 0 0 0.9rem;
+  }
+
+  .hero-slider__heading {
+    font-size: clamp(2.1rem, 1.6rem + 2vw, 3.4rem);
+    line-height: 1.08;
+    margin: 0 0 1.1rem;
+  }
+
+  .hero-slider__description {
+    font-size: 1.05rem;
+    opacity: 0.8;
+    max-width: 30rem;
+    margin: 0 0 1.75rem;
+  }
+
+  .hero-slider__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+  }
+
+  .hero-slider__button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.85rem 1.6rem;
+    border-radius: var(--radius-button);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-slider__button--primary {
+    background: var(--color-button);
+    color: var(--color-button-label);
+  }
+
+  .hero-slider__button--secondary {
+    background: transparent;
+    color: var(--color-text);
+    border: var(--border-thickness) solid var(--color-text);
+  }
+
+  .hero-slider__dots {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 5;
+  }
+
+  .hero-slider__dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    border: none;
+    background: color-mix(in srgb, var(--color-text) 30%, transparent);
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .hero-slider__dot.is-active {
+    background: var(--color-text);
+  }
+
+  .hero-slider__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    z-index: 5;
+    background: color-mix(in srgb, var(--color-background) 80%, transparent);
+    border: var(--border-thickness) solid var(--color-border);
+    border-radius: 999px;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text);
+  }
+
+  .hero-slider__arrow svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .hero-slider__arrow--prev {
+    left: 1rem;
+    transform: translateY(-50%) rotate(90deg);
+  }
+
+  .hero-slider__arrow--next {
+    right: 1rem;
+    transform: translateY(-50%) rotate(-90deg);
+  }
+
+  @media screen and (max-width: 749px) {
+    .hero-slider__arrow {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.hero",
+  "settings": [
+    {
+      "type": "select",
+      "id": "transition_style",
+      "label": "t:labels.transition_style",
+      "options": [
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide", "label": "Slide" }
+      ],
+      "default": "fade"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:labels.autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "slide_interval",
+      "label": "t:labels.slide_interval",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "t:labels.slide",
+      "settings": [
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "t:labels.color_scheme",
+          "default": "scheme-1"
+        },
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "t:labels.media_type",
+          "options": [
+            { "value": "image", "label": "t:labels.image" },
+            { "value": "video", "label": "t:labels.video" }
+          ],
+          "default": "image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:labels.image"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "t:labels.video"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_ripple",
+          "label": "t:labels.enable_ripple",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "t:labels.eyebrow"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:labels.heading",
+          "default": "Skin care that feels like a ritual"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "t:labels.description"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "t:labels.button_label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "t:labels.button_link"
+        },
+        {
+          "type": "text",
+          "id": "secondary_button_label",
+          "label": "t:labels.link_label"
+        },
+        {
+          "type": "url",
+          "id": "secondary_button_link",
+          "label": "t:labels.link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "t:general.hero",
+      "blocks": [{ "type": "slide" }]
+    }
+  ]
+}
+{% endschema %}

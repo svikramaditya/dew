@@ -1,9 +1,44 @@
 {
   "sections": {
-    "hero": {
-      "type": "hero",
+    "hero-slider": {
+      "type": "hero-slider",
+      "blocks": {
+        "slide-1": {
+          "type": "slide",
+          "settings": {
+            "color_scheme": "scheme-1",
+            "media_type": "image",
+            "image": "shopify://shop_images/dew-hero.jpg",
+            "enable_ripple": true,
+            "eyebrow": "Care, composed for everyday",
+            "heading": "Skin care that feels like a ritual",
+            "description": "Clean, considered formulas made with real ingredients -- nothing in here you can't pronounce.",
+            "button_label": "Shop all",
+            "button_link": "/collections/all"
+          }
+        },
+        "slide-2": {
+          "type": "slide",
+          "settings": {
+            "color_scheme": "scheme-2",
+            "media_type": "image",
+            "image": "shopify://shop_images/dew-hero.jpg",
+            "enable_ripple": false,
+            "eyebrow": "New this season",
+            "heading": "Six steps. One quiet routine.",
+            "description": "From first cleanse to the last drop of oil -- a full routine built to be used in order.",
+            "button_label": "Shop the routine",
+            "button_link": "/collections/all",
+            "secondary_button_label": "Our story",
+            "secondary_button_link": "/pages/about"
+          }
+        }
+      },
+      "block_order": ["slide-1", "slide-2"],
       "settings": {
-        "image": "shopify://shop_images/dew-hero.jpg"
+        "transition_style": "fade",
+        "autoplay": true,
+        "slide_interval": 6
       }
     },
     "featured-collection": {
@@ -21,7 +56,7 @@
     }
   },
   "order": [
-    "hero",
+    "hero-slider",
     "featured-collection"
   ]
 }
