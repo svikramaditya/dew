@@ -6,6 +6,7 @@
     "account": "Account",
     "cart": "Cart",
     "product": "Product",
+    "close": "Close",
     "newsletter": {
       "email_placeholder": "Your email",
       "submit": "Subscribe",
@@ -28,9 +29,21 @@
   },
   "cart": {
     "checkout": "Checkout",
-    "title": "Cart",
+    "title": "Your Cart",
     "update": "Update",
-    "remove": "Remove"
+    "remove": "Remove",
+    "decrease_quantity": "Decrease quantity",
+    "increase_quantity": "Increase quantity",
+    "empty": "Your cart is empty.",
+    "you_may_also_like": "You may also like",
+    "order_note": "Order note",
+    "order_note_placeholder": "Add a note to your order",
+    "save_note": "Save",
+    "estimated_total": "Estimated total",
+    "taxes_at_checkout": "Tax and shipping calculated at checkout",
+    "view_cart": "View cart",
+    "free_shipping_label": "Spend {{ amount }} more for free shipping",
+    "free_shipping_unlocked": "You've unlocked free shipping!"
   },
   "customers": {
     "login": {
@@ -56,11 +69,14 @@
     "enter": "Enter"
   },
   "search": {
-    "title": "Search",
-    "placeholder": "Search articles, pages, or products",
+    "title": "Products",
+    "placeholder": "Search products",
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
-    "results_for_html": "{{ count }} results found for {{ terms }}"
+    "results_for_html": "{{ count }} results found for {{ terms }}",
+    "popular_searches": "Popular searches:",
+    "suggestions": "Suggestions",
+    "start_typing": "Start typing to search"
   },
   "labels": {
     "variant": "Variant",

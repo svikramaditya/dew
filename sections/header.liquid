@@ -4,6 +4,34 @@
       <span class="header__menu-icon"></span>
     </button>
 
+    <nav class="header__nav" aria-label="{{ 'general.menu' | t }}">
+      {%- for link in section.settings.menu.links -%}
+        <div class="header__nav-item{% if link.links.size > 0 %} has-dropdown{% endif %}">
+          <a href="{{ link.url }}" class="header__nav-link" {% if link.active %}aria-current="page"{% endif %}>
+            {{ link.title }}
+          </a>
+          {%- if link.links.size > 0 -%}
+            <div class="header__dropdown{% if section.settings.enable_mega_menu %} header__dropdown--mega{% endif %}">
+              <div class="header__dropdown-inner{% if section.settings.enable_mega_menu %} header__dropdown-inner--mega{% endif %}">
+                {%- for child in link.links -%}
+                  <div class="header__dropdown-column">
+                    <a href="{{ child.url }}" class="header__dropdown-heading" {% if child.active %}aria-current="page"{% endif %}>{{ child.title }}</a>
+                    {%- if child.links.size > 0 -%}
+                      <ul class="header__dropdown-sublist">
+                        {%- for grandchild in child.links -%}
+                          <li><a href="{{ grandchild.url }}">{{ grandchild.title }}</a></li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </nav>
+
     <a href="{{ routes.root_url }}" class="header__logo">
       {%- if section.settings.logo != blank -%}
         {{ section.settings.logo | image_url: width: 300 | image_tag: alt: shop.name, class: 'header__logo-image' }}
@@ -12,18 +40,10 @@
       {%- endif -%}
     </a>
 
-    <nav class="header__nav" aria-label="{{ 'general.menu' | t }}">
-      {%- for link in section.settings.menu.links -%}
-        <a href="{{ link.url }}" class="header__nav-link" {% if link.active %}aria-current="page"{% endif %}>
-          {{ link.title }}
-        </a>
-      {%- endfor -%}
-    </nav>
-
     <div class="header__icons">
-      <a href="{{ routes.search_url }}" class="header__icon-link" aria-label="{{ 'general.search' | t }}">
+      <button type="button" class="header__icon-link" data-search-toggle aria-label="{{ 'general.search' | t }}">
         {{ 'icon-search.svg' | inline_asset_content }}
-      </a>
+      </button>
 
       {%- if shop.customer_accounts_enabled -%}
         <a href="{{ routes.account_url }}" class="header__icon-link" aria-label="{{ 'general.account' | t }}">
@@ -31,9 +51,9 @@
         </a>
       {%- endif -%}
 
-      <a href="{{ routes.cart_url }}" class="header__icon-link header__cart-link" aria-label="{{ 'general.cart' | t }}">
+      <a href="{{ routes.cart_url }}" class="header__icon-link header__cart-link" data-cart-toggle aria-label="{{ 'general.cart' | t }}">
         {{ 'icon-cart.svg' | inline_asset_content }}
-        <span class="header__cart-count" {% if cart.item_count == 0 %}hidden{% endif %}>
+        <span class="header__cart-count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>
           {{ cart.item_count }}
         </span>
       </a>
@@ -46,21 +66,32 @@
         <a href="{{ link.url }}" class="header__mobile-nav-link" {% if link.active %}aria-current="page"{% endif %}>
           {{ link.title }}
         </a>
+        {%- for child in link.links -%}
+          <a href="{{ child.url }}" class="header__mobile-nav-link header__mobile-nav-link--child">
+            {{ child.title }}
+          </a>
+        {%- endfor -%}
       {%- endfor -%}
     </nav>
   </div>
 </header>
 
+{% render 'search-drawer' %}
+{% render 'cart-drawer' %}
+
 <script src="{{ 'component-mobile-menu.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'component-search-drawer.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'component-cart-drawer.js' | asset_url }}" defer="defer"></script>
 
 {% stylesheet %}
   .header__inner {
     max-width: var(--page-width);
     margin: 0 auto;
-    padding: 1.4rem var(--page-margin);
-    display: flex;
+    padding: 1.1rem var(--page-margin);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
   .header__menu-toggle {
@@ -69,6 +100,7 @@
     border: none;
     padding: 0.25rem;
     cursor: pointer;
+    justify-self: start;
   }
 
   .header__menu-icon,
@@ -92,6 +124,7 @@
   .header__menu-icon::after { top: 0.4rem; }
 
   .header__logo {
+    grid-column: 2;
     font-family: var(--font-heading--family);
     font-style: var(--font-heading--style);
     font-weight: 600;
@@ -108,13 +141,19 @@
   }
 
   .header__nav {
+    grid-column: 1;
     display: flex;
-    gap: 2rem;
-    flex: 1;
-    justify-content: center;
+    gap: 1.75rem;
+    justify-self: start;
+  }
+
+  .header__nav-item {
+    position: relative;
   }
 
   .header__nav-link {
+    display: block;
+    padding: 0.5rem 0;
     text-decoration: none;
     color: var(--color-text);
     font-size: 0.85rem;
@@ -126,10 +165,91 @@
     font-weight: 700;
   }
 
+  .header__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 30;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(0.4rem);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+    background: var(--color-background);
+    border: var(--border-thickness) solid var(--color-border);
+    border-radius: var(--radius-card);
+    box-shadow: 0 1.25rem 2.5rem rgba(0, 0, 0, 0.08);
+    padding: 1.25rem;
+    min-width: 12rem;
+  }
+
+  .header__nav-item.has-dropdown:hover .header__dropdown,
+  .header__nav-item.has-dropdown:focus-within .header__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .header__dropdown--mega {
+    left: 50%;
+    transform: translate(-50%, 0.4rem);
+    width: min(60rem, 90vw);
+  }
+
+  .header__nav-item.has-dropdown:hover .header__dropdown--mega,
+  .header__nav-item.has-dropdown:focus-within .header__dropdown--mega {
+    transform: translate(-50%, 0);
+  }
+
+  .header__dropdown-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .header__dropdown-inner--mega {
+    flex-direction: row;
+    gap: 2.5rem;
+  }
+
+  .header__dropdown-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .header__dropdown-heading {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--color-text);
+  }
+
+  .header__dropdown-sublist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .header__dropdown-sublist a {
+    font-size: 0.82rem;
+    text-decoration: none;
+    color: var(--color-text);
+    opacity: 0.75;
+  }
+
+  .header__dropdown-sublist a:hover {
+    opacity: 1;
+  }
+
   .header__icons {
+    grid-column: 3;
     display: flex;
     align-items: center;
     gap: 1.25rem;
+    justify-self: end;
     padding-right: 0.55rem;
   }
 
@@ -137,6 +257,10 @@
     position: relative;
     display: flex;
     color: var(--color-text);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
   }
 
   .header__icon-link svg {
@@ -181,7 +305,13 @@
     border-bottom: var(--border-thickness) solid var(--color-border);
   }
 
-  @media screen and (max-width: 749px) {
+  .header__mobile-nav-link--child {
+    padding-left: 1rem;
+    font-size: 0.9rem;
+    opacity: 0.75;
+  }
+
+  @media screen and (max-width: 899px) {
     .header__menu-toggle {
       display: block;
     }
@@ -191,7 +321,11 @@
     }
 
     .header__inner {
-      justify-content: space-between;
+      grid-template-columns: auto 1fr auto;
+    }
+
+    .header__logo {
+      justify-self: center;
     }
   }
 {% endstylesheet %}
@@ -216,6 +350,12 @@
       "id": "menu",
       "label": "t:labels.menu",
       "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mega_menu",
+      "label": "t:labels.enable_mega_menu",
+      "default": true
     }
   ]
 }

@@ -1,0 +1,163 @@
+{%- if section.blocks.size == 0 and section.settings.show_social_icons == false -%}
+  {%- comment -%} Nothing configured yet -- stay invisible rather than render an empty bar. {%- endcomment -%}
+{%- else -%}
+<div class="announcement-bar color-{{ section.settings.color_scheme }} full-width">
+  <div class="announcement-bar__inner">
+    <div class="announcement-bar__social">
+      {%- if section.settings.show_social_icons -%}
+        {%- if section.settings.instagram_url != blank -%}
+          <a href="{{ section.settings.instagram_url }}" class="announcement-bar__social-link" aria-label="Instagram">{{ 'icon-instagram.svg' | inline_asset_content }}</a>
+        {%- endif -%}
+        {%- if section.settings.facebook_url != blank -%}
+          <a href="{{ section.settings.facebook_url }}" class="announcement-bar__social-link" aria-label="Facebook">{{ 'icon-facebook.svg' | inline_asset_content }}</a>
+        {%- endif -%}
+        {%- if section.settings.tiktok_url != blank -%}
+          <a href="{{ section.settings.tiktok_url }}" class="announcement-bar__social-link" aria-label="TikTok">{{ 'icon-tiktok.svg' | inline_asset_content }}</a>
+        {%- endif -%}
+        {%- if section.settings.twitter_url != blank -%}
+          <a href="{{ section.settings.twitter_url }}" class="announcement-bar__social-link" aria-label="X">{{ 'icon-twitter.svg' | inline_asset_content }}</a>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <announcement-messages class="announcement-bar__messages" style="--message-count: {{ section.blocks.size }};">
+        {%- for block in section.blocks -%}
+          <p class="announcement-bar__message" {{ block.shopify_attributes }}>{{ block.settings.message }}</p>
+        {%- endfor -%}
+      </announcement-messages>
+    {%- endif -%}
+
+    <div class="announcement-bar__spacer" aria-hidden="true"></div>
+  </div>
+</div>
+
+{% if section.blocks.size > 1 %}
+  <script src="{{ 'component-announcement-messages.js' | asset_url }}" defer="defer"></script>
+{% endif %}
+
+{% stylesheet %}
+  .announcement-bar__inner {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 0.55rem var(--page-margin);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.78rem;
+  }
+
+  .announcement-bar__social {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 5rem;
+  }
+
+  .announcement-bar__social-link {
+    display: flex;
+    color: currentcolor;
+  }
+
+  .announcement-bar__social-link svg {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  .announcement-bar__spacer {
+    min-width: 5rem;
+  }
+
+  .announcement-bar__messages {
+    position: relative;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    height: 1.2rem;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .announcement-bar__message {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: translateY(0.4rem);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+  }
+
+  .announcement-bar__message.is-active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media screen and (max-width: 749px) {
+    .announcement-bar__social,
+    .announcement-bar__spacer {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.announcement_bar",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_icons",
+      "label": "t:labels.show_social_icons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "instagram_url",
+      "label": "t:labels.instagram_url"
+    },
+    {
+      "type": "text",
+      "id": "facebook_url",
+      "label": "t:labels.facebook_url"
+    },
+    {
+      "type": "text",
+      "id": "tiktok_url",
+      "label": "t:labels.tiktok_url"
+    },
+    {
+      "type": "text",
+      "id": "twitter_url",
+      "label": "t:labels.twitter_url"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "t:labels.message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "message",
+          "label": "t:labels.message",
+          "default": "Free shipping on orders over $75"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5
+}
+{% endschema %}
+{%- endif -%}

@@ -1,0 +1,41 @@
+{%- if predictive_search.performed -%}
+  {%- assign products = predictive_search.resources.results.products -%}
+  {%- assign queries = predictive_search.resources.results.queries -%}
+
+  {%- if queries.size > 0 -%}
+    <div class="search-drawer__suggestions">
+      <span class="search-drawer__popular-label">{{ 'search.suggestions' | t }}</span>
+      <ul class="search-drawer__suggestion-list">
+        {%- for query in queries -%}
+          <li><button type="button" class="search-drawer__suggestion" data-search-term>{{ query.styled_text }}</button></li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+
+  {%- if products.size > 0 -%}
+    <div class="search-drawer__results-header">
+      <span>{{ 'search.title' | t }}</span>
+    </div>
+    <div class="search-drawer__results-grid">
+      {%- for product in products -%}
+        <a href="{{ product.url }}" class="product-card product-card--search">
+          <span class="product-card__media">
+            {%- if product.featured_image != blank -%}
+              {%- assign item_alt = product.featured_image.alt | default: product.title -%}
+              {{ product.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: item_alt, class: 'product-card__image' }}
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg product-card__image' }}
+            {%- endif -%}
+          </span>
+          <span class="product-card__content">
+            <span class="product-card__title">{{ product.title }}</span>
+            <span class="product-card__price">{{ product.price | money }}</span>
+          </span>
+        </a>
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    <p class="search-drawer__hint">{{ 'search.no_results_html' | t: terms: predictive_search.terms }}</p>
+  {%- endif -%}
+{%- endif -%}

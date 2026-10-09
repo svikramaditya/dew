@@ -51,7 +51,7 @@
         <div class="product__description">{{ product.description }}</div>
       {%- endif -%}
 
-      {% form 'product', product, class: 'product__form' %}
+      {% form 'product', product, class: 'product__form ajax-cart-form' %}
         {%- if product.has_only_default_variant == false -%}
           <label class="product__label" for="ProductVariant-{{ section.id }}">{{ 'labels.variant' | t }}</label>
           <select class="product__variant-select" name="id" id="ProductVariant-{{ section.id }}">
