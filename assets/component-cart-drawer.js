@@ -193,8 +193,8 @@ class CartDrawer extends HTMLElement {
     if (remaining <= 0) {
       this.shippingMessage.textContent = this.dataset.freeShippingUnlocked || "You've unlocked free shipping!";
     } else {
-      const label = this.dataset.freeShippingLabel || 'Spend {amount} more for free shipping';
-      this.shippingMessage.textContent = label.replace('{amount}', this.formatMoney(remaining));
+      const label = this.dataset.freeShippingLabel || 'Spend %%amount%% more for free shipping';
+      this.shippingMessage.textContent = label.replace('%%amount%%', this.formatMoney(remaining));
     }
   }
 

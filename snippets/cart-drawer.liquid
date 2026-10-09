@@ -2,7 +2,7 @@
   class="cart-drawer"
   hidden
   data-free-shipping-threshold="{{ settings.free_shipping_threshold | times: 100 }}"
-  data-free-shipping-label="{{ 'cart.free_shipping_label' | t: amount: '{amount}' }}"
+  data-free-shipping-label="{{ 'cart.free_shipping_label' | t: amount: '%%amount%%' }}"
   data-free-shipping-unlocked="{{ 'cart.free_shipping_unlocked' | t }}"
   data-empty-text="{{ 'cart.empty' | t }}"
 >
