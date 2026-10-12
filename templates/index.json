@@ -53,10 +53,66 @@
         "button_label": "View all",
         "button_link": "/collections/all"
       }
+    },
+    "philosophy": {
+      "type": "philosophy",
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
+    },
+    "horizontal-scroll": {
+      "type": "horizontal-scroll",
+      "settings": {
+        "color_scheme": "scheme-2",
+        "heading": "Shop the full edit",
+        "description": "Keep scrolling -- every step of the routine, in one pass.",
+        "collection": "all",
+        "products_to_show": 6
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Can I use this serum with retinol?",
+            "answer": "We recommend alternating nights. Use the serum on one night, and retinol on another, to avoid irritation."
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Is it safe for sensitive skin?",
+            "answer": "Yes -- every formula is fragrance-free and patch-tested, but we always recommend a 24-hour patch test for new products."
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "How soon will I see results?",
+            "answer": "Most people notice a difference in texture within 2-3 weeks of consistent use, with fuller results around 8 weeks."
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Do I need to wear sunscreen with this product?",
+            "answer": "Yes, especially with active ingredients like vitamin C or retinol -- always finish your morning routine with SPF."
+          }
+        }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"],
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
     }
   },
   "order": [
     "hero-slider",
-    "featured-collection"
+    "featured-collection",
+    "philosophy",
+    "horizontal-scroll",
+    "faq"
   ]
 }
