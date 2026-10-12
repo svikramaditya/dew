@@ -19,20 +19,7 @@
     </div>
     <div class="search-drawer__results-grid">
       {%- for product in products -%}
-        <a href="{{ product.url }}" class="product-card product-card--search">
-          <span class="product-card__media">
-            {%- if product.featured_image != blank -%}
-              {%- assign item_alt = product.featured_image.alt | default: product.title -%}
-              {{ product.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: item_alt, class: 'product-card__image' }}
-            {%- else -%}
-              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg product-card__image' }}
-            {%- endif -%}
-          </span>
-          <span class="product-card__content">
-            <span class="product-card__title">{{ product.title }}</span>
-            <span class="product-card__price">{{ product.price | money }}</span>
-          </span>
-        </a>
+        {% render 'product-card', product: product, card_product_loading: 'lazy' %}
       {%- endfor -%}
     </div>
   {%- else -%}

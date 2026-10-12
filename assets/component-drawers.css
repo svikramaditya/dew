@@ -153,6 +153,12 @@ search-drawer.is-open .search-drawer__panel {
   font-size: 0.85rem;
 }
 
+.search-drawer__results-grid .product-card__quick-actions,
+.search-drawer__results-grid .product-card__add,
+.search-drawer__results-grid .product-card__badges {
+  display: none;
+}
+
 /* Cart drawer: slides in from the right */
 .cart-drawer {
   position: fixed;

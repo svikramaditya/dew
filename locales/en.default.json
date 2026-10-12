@@ -83,5 +83,19 @@
     "quantity": "Quantity",
     "add_to_cart": "Add to cart",
     "sold_out": "Sold out"
+  },
+  "products": {
+    "badge_sale": "Sale",
+    "badge_new": "New",
+    "badge_bestseller": "Bestseller",
+    "badge_sold_out": "Sold out",
+    "quick_view": "Quick view",
+    "add_to_wishlist": "Add to wishlist",
+    "filter": "Filter",
+    "sort_by": "Sort by",
+    "products": "products",
+    "clear_all": "Clear all",
+    "apply_filters": "Apply",
+    "no_products_found": "No products found."
   }
 }

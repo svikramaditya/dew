@@ -25,26 +25,7 @@
 
     <ul class="featured-collection__grid" style="--columns-desktop: {{ section.settings.columns_desktop }};">
       {%- for product in chosen_collection.products limit: section.settings.products_to_show -%}
-        {%- assign card_alt = product.featured_image.alt | default: product.title -%}
-        <li class="product-card">
-          <a href="{{ product.url }}" class="product-card__link">
-            <span class="product-card__media">
-              {%- if product.featured_image != blank -%}
-                {{
-                  product.featured_image
-                  | image_url: width: 800
-                  | image_tag: widths: '400,600,800', sizes: '(min-width: 900px) 25vw, 50vw', loading: loading_strategy, alt: card_alt, class: 'product-card__image'
-                }}
-              {%- else -%}
-                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg product-card__image' }}
-              {%- endif -%}
-            </span>
-            <span class="product-card__content">
-              <span class="product-card__title">{{ product.title }}</span>
-              <span class="product-card__price">{{ product.price | money }}</span>
-            </span>
-          </a>
-        </li>
+        <li>{% render 'product-card', product: product, card_product_loading: loading_strategy %}</li>
       {%- else -%}
         {%- for i in (1..section.settings.products_to_show) -%}
           <li class="product-card product-card--placeholder">
@@ -118,56 +99,6 @@
     .featured-collection__grid {
       grid-template-columns: repeat(var(--columns-desktop, 3), 1fr);
     }
-  }
-
-  .product-card {
-    list-style: none;
-  }
-
-  .product-card__link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .product-card__media {
-    display: block;
-    position: relative;
-    aspect-ratio: 4 / 5;
-    overflow: hidden;
-    border-radius: var(--radius-card);
-    background: color-mix(in srgb, var(--color-border) 40%, transparent);
-  }
-
-  .product-card__image,
-  .product-card__media svg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
-
-  .product-card__link:hover .product-card__image {
-    transform: scale(1.04);
-  }
-
-  .product-card__content {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.75rem;
-    margin-top: 0.9rem;
-  }
-
-  .product-card__title {
-    font-size: 0.95rem;
-    font-weight: 600;
-  }
-
-  .product-card__price {
-    font-size: 0.9rem;
-    opacity: 0.7;
-    white-space: nowrap;
   }
 
   .product-card--placeholder {

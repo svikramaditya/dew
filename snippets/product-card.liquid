@@ -1,0 +1,91 @@
+{%- comment -%}
+  Shared product card. Accepts:
+    product (required), card_product_loading (optional 'lazy'/'eager')
+  Badges are derived, not hand-tagged by the merchant for every product:
+    - Sale: compare_at_price > price
+    - Sold out: not available
+    - New: published within the last 30 days
+    - Bestseller: product tagged "bestseller"
+{%- endcomment -%}
+{%- liquid
+  assign card_loading = card_product_loading | default: 'lazy'
+  assign card_alt = product.featured_image.alt | default: product.title
+  assign second_image = product.images[1]
+  assign is_sale = false
+  if product.compare_at_price > product.price
+    assign is_sale = true
+  endif
+  assign now_ts = 'now' | date: '%s'
+  assign published_ts = product.published_at | date: '%s'
+  assign seconds_since_publish = now_ts | minus: published_ts
+  assign days_since_publish = seconds_since_publish | divided_by: 86400
+  assign is_new = false
+  if days_since_publish <= 30
+    assign is_new = true
+  endif
+  assign is_bestseller = false
+  if product.tags contains 'bestseller'
+    assign is_bestseller = true
+  endif
+-%}
+<div class="product-card">
+  <a href="{{ product.url }}" class="product-card__link">
+    <span class="product-card__media">
+      {%- if product.featured_image != blank -%}
+        {{
+          product.featured_image
+          | image_url: width: 800
+          | image_tag: widths: '400,600,800', sizes: '(min-width: 900px) 25vw, 50vw', loading: card_loading, alt: card_alt, class: 'product-card__image product-card__image--primary'
+        }}
+        {%- if second_image -%}
+          {{
+            second_image
+            | image_url: width: 800
+            | image_tag: widths: '400,600,800', loading: 'lazy', alt: card_alt, class: 'product-card__image product-card__image--secondary'
+          }}
+        {%- endif -%}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg product-card__image' }}
+      {%- endif -%}
+
+      <span class="product-card__badges">
+        {%- if product.available == false -%}
+          <span class="product-card__badge product-card__badge--sold-out">{{ 'products.badge_sold_out' | t }}</span>
+        {%- else -%}
+          {%- if is_sale -%}
+            <span class="product-card__badge product-card__badge--sale">{{ 'products.badge_sale' | t }}</span>
+          {%- elsif is_new -%}
+            <span class="product-card__badge product-card__badge--new">{{ 'products.badge_new' | t }}</span>
+          {%- endif -%}
+          {%- if is_bestseller -%}
+            <span class="product-card__badge product-card__badge--bestseller">{{ 'products.badge_bestseller' | t }}</span>
+          {%- endif -%}
+        {%- endif -%}
+      </span>
+
+      <span class="product-card__quick-actions">
+        <button type="button" class="product-card__quick-action" data-quick-view="{{ product.handle }}" aria-label="{{ 'products.quick_view' | t }}">
+          {{ 'icon-eye.svg' | inline_asset_content }}
+        </button>
+        <button type="button" class="product-card__quick-action" data-wishlist-toggle="{{ product.id }}" aria-label="{{ 'products.add_to_wishlist' | t }}">
+          {{ 'icon-heart.svg' | inline_asset_content }}
+        </button>
+      </span>
+
+      {%- if product.available -%}
+        <button type="button" class="product-card__add" data-quick-add="{{ product.selected_or_first_available_variant.id }}">
+          {{ 'labels.add_to_cart' | t }} {{ 'icon-cart.svg' | inline_asset_content }}
+        </button>
+      {%- endif -%}
+    </span>
+    <span class="product-card__content">
+      <span class="product-card__title">{{ product.title }}</span>
+      <span class="product-card__price">
+        {{- product.price | money -}}
+        {%- if is_sale -%}
+          <s class="product-card__price-compare">{{ product.compare_at_price | money }}</s>
+        {%- endif -%}
+      </span>
+    </span>
+  </a>
+</div>
