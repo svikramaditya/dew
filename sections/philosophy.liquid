@@ -12,7 +12,7 @@
 
     <scroll-reveal-text class="philosophy__text">
       {%- for word in words -%}
-        <span class="philosophy__word">{{ word }}{% unless forloop.last %}&nbsp;{% endunless %}</span>
+        <span class="philosophy__word">{{ word }}</span>{% unless forloop.last %} {% endunless %}
       {%- endfor -%}
     </scroll-reveal-text>
   </div>
