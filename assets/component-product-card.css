@@ -35,12 +35,18 @@
   opacity: 0;
 }
 
-.product-card__link:hover .product-card__image--primary {
+/* Only fade the primary image when a second image actually exists to swap
+   to -- otherwise hovering would fade the only photo to nothing. */
+.product-card__link:hover .product-card__media:has(.product-card__image--secondary) .product-card__image--primary {
   opacity: 0;
 }
 
 .product-card__link:hover .product-card__image--secondary {
   opacity: 1;
+  transform: scale(1.04);
+}
+
+.product-card__link:hover .product-card__media:not(:has(.product-card__image--secondary)) .product-card__image--primary {
   transform: scale(1.04);
 }
 
