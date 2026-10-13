@@ -17,9 +17,19 @@
         "menu": "",
         "show_payment_icons": true
       }
+    },
+    "newsletter-popup": {
+      "type": "newsletter-popup",
+      "settings": {}
+    },
+    "purchase-popup": {
+      "type": "purchase-popup",
+      "settings": {}
     }
   },
   "order": [
-    "footer"
+    "footer",
+    "newsletter-popup",
+    "purchase-popup"
   ]
 }
