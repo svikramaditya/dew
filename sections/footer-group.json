@@ -17,24 +17,9 @@
         "menu": "",
         "show_payment_icons": true
       }
-    },
-    "newsletter-popup": {
-      "type": "newsletter-popup",
-      "settings": {
-        "enable": true
-      }
-    },
-    "purchase-popup": {
-      "type": "purchase-popup",
-      "settings": {
-        "enable": true,
-        "collection": "all"
-      }
     }
   },
   "order": [
-    "footer",
-    "newsletter-popup",
-    "purchase-popup"
+    "footer"
   ]
 }

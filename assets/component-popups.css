@@ -1,0 +1,227 @@
+.newsletter-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 97;
+}
+
+.newsletter-popup__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 16, 12, 0.45);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.newsletter-popup.is-open .newsletter-popup__backdrop {
+  opacity: 1;
+}
+
+.newsletter-popup__panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -46%);
+  width: min(44rem, 92vw);
+  max-height: 85vh;
+  overflow: hidden;
+  background: var(--color-background);
+  color: var(--color-text);
+  border-radius: var(--radius-card);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 650px) {
+  .newsletter-popup__panel {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.newsletter-popup.is-open .newsletter-popup__panel {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.newsletter-popup__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  background: color-mix(in srgb, var(--color-background) 70%, transparent);
+  border: none;
+  border-radius: 999px;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.newsletter-popup__close svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.newsletter-popup__media {
+  display: none;
+  background: color-mix(in srgb, var(--color-border) 40%, transparent);
+}
+
+@media screen and (min-width: 650px) {
+  .newsletter-popup__media {
+    display: block;
+  }
+}
+
+.newsletter-popup__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.newsletter-popup__content {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.newsletter-popup__heading {
+  font-size: 1.6rem;
+  margin: 0 0 0.75rem;
+}
+
+.newsletter-popup__description {
+  font-size: 0.92rem;
+  opacity: 0.75;
+  margin: 0 0 1.5rem;
+}
+
+.newsletter-popup__field {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.newsletter-popup__field input {
+  flex: 1;
+  padding: 0.75rem 0.9rem;
+  border: var(--border-thickness) solid var(--color-border);
+  border-radius: var(--radius-input);
+}
+
+.newsletter-popup__field button {
+  padding: 0.75rem 1.3rem;
+  border: none;
+  border-radius: var(--radius-button);
+  background: var(--color-button);
+  color: var(--color-button-label);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Recent purchase popup */
+.purchase-popup {
+  position: fixed;
+  bottom: 1.5rem;
+  z-index: 60;
+  max-width: 20rem;
+}
+
+.purchase-popup--bottom-left {
+  left: 1.5rem;
+}
+
+.purchase-popup--bottom-right {
+  right: 1.5rem;
+}
+
+.purchase-popup__item {
+  display: none;
+  position: relative;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--color-background);
+  color: var(--color-text);
+  border: var(--border-thickness) solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 0.85rem 1rem;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.purchase-popup__item.is-visible {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.purchase-popup__close {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text);
+  opacity: 0.5;
+  padding: 0.2rem;
+}
+
+.purchase-popup__close svg {
+  width: 0.7rem;
+  height: 0.7rem;
+}
+
+.purchase-popup__media {
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  border-radius: var(--radius-input);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-border) 40%, transparent);
+}
+
+.purchase-popup__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.purchase-popup__label {
+  font-size: 0.72rem;
+  opacity: 0.6;
+  margin: 0;
+}
+
+.purchase-popup__product {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0.1rem 0;
+}
+
+.purchase-popup__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  opacity: 0.55;
+  margin: 0;
+}
+
+.purchase-popup__meta svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+@media screen and (max-width: 749px) {
+  .purchase-popup {
+    max-width: calc(100vw - 2rem);
+  }
+}

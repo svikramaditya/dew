@@ -1,0 +1,41 @@
+{%- if settings.enable_newsletter_popup -%}
+  <newsletter-popup
+    class="newsletter-popup color-scheme-1"
+    hidden
+    data-delay="{{ settings.newsletter_popup_delay | times: 1000 }}"
+  >
+    <div class="newsletter-popup__backdrop" data-popup-close></div>
+    <div class="newsletter-popup__panel" role="dialog" aria-modal="true">
+      <button type="button" class="newsletter-popup__close" data-popup-close aria-label="{{ 'general.close' | t }}">
+        {{ 'icon-close.svg' | inline_asset_content }}
+      </button>
+      <div class="newsletter-popup__media">
+        {%- if settings.newsletter_popup_image != blank -%}
+          {{ settings.newsletter_popup_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: settings.newsletter_popup_heading }}
+        {%- endif -%}
+      </div>
+      <div class="newsletter-popup__content">
+        {%- if settings.newsletter_popup_heading != blank -%}
+          <h2 class="newsletter-popup__heading">{{ settings.newsletter_popup_heading }}</h2>
+        {%- endif -%}
+        {%- if settings.newsletter_popup_description != blank -%}
+          <p class="newsletter-popup__description">{{ settings.newsletter_popup_description }}</p>
+        {%- endif -%}
+
+        {% form 'customer' %}
+          {%- if form.posted_successfully? -%}
+            <p class="newsletter-popup__success">{{ 'general.newsletter.success' | t }}</p>
+          {%- else -%}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <div class="newsletter-popup__field">
+              <input type="email" name="contact[email]" placeholder="{{ 'general.newsletter.email_placeholder' | t }}" required>
+              <button type="submit">{{ 'general.newsletter.submit' | t }}</button>
+            </div>
+          {%- endif -%}
+        {% endform %}
+      </div>
+    </div>
+  </newsletter-popup>
+
+  <script src="{{ 'component-newsletter-popup.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}

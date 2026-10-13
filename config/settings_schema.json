@@ -217,5 +217,87 @@
         "default": "Cleanser, Serum, Moisturizer"
       }
     ]
+  },
+  {
+    "name": "t:general.newsletter_popup",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_newsletter_popup",
+        "label": "t:labels.enable_popup",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "newsletter_popup_delay",
+        "label": "t:labels.delay_seconds",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "default": 6
+      },
+      {
+        "type": "image_picker",
+        "id": "newsletter_popup_image",
+        "label": "t:labels.image"
+      },
+      {
+        "type": "text",
+        "id": "newsletter_popup_heading",
+        "label": "t:labels.heading",
+        "default": "Get 10% off your first order"
+      },
+      {
+        "type": "textarea",
+        "id": "newsletter_popup_description",
+        "label": "t:labels.description",
+        "default": "Subscribe for early access to new formulas, skin tips, and a welcome discount."
+      }
+    ]
+  },
+  {
+    "name": "t:general.purchase_popup",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_purchase_popup",
+        "label": "t:labels.enable_popup",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "purchase_popup_position",
+        "label": "t:labels.position",
+        "options": [
+          { "value": "bottom-left", "label": "t:labels.bottom_left" },
+          { "value": "bottom-right", "label": "t:labels.bottom_right" }
+        ],
+        "default": "bottom-left"
+      },
+      {
+        "type": "text",
+        "id": "purchase_popup_locations",
+        "label": "t:labels.locations",
+        "default": "New York, US; Austin, US; Toronto, CA; London, UK"
+      },
+      {
+        "type": "range",
+        "id": "purchase_popup_display_seconds",
+        "label": "t:labels.display_seconds",
+        "min": 3,
+        "max": 15,
+        "step": 1,
+        "default": 6
+      },
+      {
+        "type": "range",
+        "id": "purchase_popup_interval_seconds",
+        "label": "t:labels.interval_seconds",
+        "min": 5,
+        "max": 30,
+        "step": 1,
+        "default": 12
+      }
+    ]
   }
 ]

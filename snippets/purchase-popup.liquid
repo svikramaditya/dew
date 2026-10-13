@@ -1,0 +1,37 @@
+{%- liquid
+  assign chosen_collection = collections['all']
+  assign locations = settings.purchase_popup_locations | split: ';'
+-%}
+{%- if settings.enable_purchase_popup and chosen_collection.products.size > 0 -%}
+  <purchase-popup
+    class="purchase-popup purchase-popup--{{ settings.purchase_popup_position }}"
+    hidden
+    data-display-seconds="{{ settings.purchase_popup_display_seconds }}"
+    data-interval-seconds="{{ settings.purchase_popup_interval_seconds }}"
+  >
+    {%- for product in chosen_collection.products limit: 6 -%}
+      {%- assign location_index = forloop.index0 | modulo: locations.size -%}
+      {%- assign minutes_ago = forloop.index | times: 3 -%}
+      <div class="purchase-popup__item" data-purchase-item>
+        <button type="button" class="purchase-popup__close" data-purchase-close aria-label="{{ 'general.close' | t }}">
+          {{ 'icon-close.svg' | inline_asset_content }}
+        </button>
+        <div class="purchase-popup__media">
+          {%- if product.featured_image != blank -%}
+            {{ product.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: product.title }}
+          {%- endif -%}
+        </div>
+        <div class="purchase-popup__content">
+          <p class="purchase-popup__label">{{ 'general.someone_purchased' | t }}</p>
+          <p class="purchase-popup__product">{{ product.title }}</p>
+          <p class="purchase-popup__meta">
+            {{ 'icon-clock.svg' | inline_asset_content }}
+            {{ 'general.minutes_ago' | t: count: minutes_ago }} &middot; {{ locations[location_index] | strip }}
+          </p>
+        </div>
+      </div>
+    {%- endfor -%}
+  </purchase-popup>
+
+  <script src="{{ 'component-purchase-popup.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
