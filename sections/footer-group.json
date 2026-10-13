@@ -20,11 +20,16 @@
     },
     "newsletter-popup": {
       "type": "newsletter-popup",
-      "settings": {}
+      "settings": {
+        "enable": true
+      }
     },
     "purchase-popup": {
       "type": "purchase-popup",
-      "settings": {}
+      "settings": {
+        "enable": true,
+        "collection": "all"
+      }
     }
   },
   "order": [
