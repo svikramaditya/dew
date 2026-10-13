@@ -1,0 +1,194 @@
+{%- liquid
+  assign chosen_collection = collections[section.settings.collection]
+  assign locations = section.settings.locations | split: ';'
+-%}
+{%- if section.settings.enable and chosen_collection.products.size > 0 -%}
+  <purchase-popup
+    class="purchase-popup purchase-popup--{{ section.settings.position }}"
+    hidden
+    data-display-seconds="{{ section.settings.display_seconds }}"
+    data-interval-seconds="{{ section.settings.interval_seconds }}"
+  >
+    {%- for product in chosen_collection.products limit: 6 -%}
+      {%- assign location_index = forloop.index0 | modulo: locations.size -%}
+      {%- assign minutes_ago = forloop.index | times: 3 -%}
+      <div class="purchase-popup__item" data-purchase-item>
+        <button type="button" class="purchase-popup__close" data-purchase-close aria-label="{{ 'general.close' | t }}">
+          {{ 'icon-close.svg' | inline_asset_content }}
+        </button>
+        <div class="purchase-popup__media">
+          {%- if product.featured_image != blank -%}
+            {{ product.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: product.title }}
+          {%- endif -%}
+        </div>
+        <div class="purchase-popup__content">
+          <p class="purchase-popup__label">{{ 'general.someone_purchased' | t }}</p>
+          <p class="purchase-popup__product">{{ product.title }}</p>
+          <p class="purchase-popup__meta">
+            {{ 'icon-clock.svg' | inline_asset_content }}
+            {{ 'general.minutes_ago' | t: count: minutes_ago }} &middot; {{ locations[location_index] | strip }}
+          </p>
+        </div>
+      </div>
+    {%- endfor -%}
+  </purchase-popup>
+
+  <script src="{{ 'component-purchase-popup.js' | asset_url }}" defer="defer"></script>
+
+  {% stylesheet %}
+    .purchase-popup {
+      position: fixed;
+      bottom: 1.5rem;
+      z-index: 60;
+      max-width: 20rem;
+    }
+
+    .purchase-popup--bottom-left {
+      left: 1.5rem;
+    }
+
+    .purchase-popup--bottom-right {
+      right: 1.5rem;
+    }
+
+    .purchase-popup__item {
+      display: none;
+      position: relative;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--color-background);
+      color: var(--color-text);
+      border: var(--border-thickness) solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 0.85rem 1rem;
+      box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.08);
+      opacity: 0;
+      transform: translateY(0.5rem);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .purchase-popup__item.is-visible {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .purchase-popup__close {
+      position: absolute;
+      top: 0.4rem;
+      right: 0.4rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--color-text);
+      opacity: 0.5;
+      padding: 0.2rem;
+    }
+
+    .purchase-popup__close svg {
+      width: 0.7rem;
+      height: 0.7rem;
+    }
+
+    .purchase-popup__media {
+      width: 3rem;
+      height: 3rem;
+      flex-shrink: 0;
+      border-radius: var(--radius-input);
+      overflow: hidden;
+      background: color-mix(in srgb, var(--color-border) 40%, transparent);
+    }
+
+    .purchase-popup__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .purchase-popup__label {
+      font-size: 0.72rem;
+      opacity: 0.6;
+      margin: 0;
+    }
+
+    .purchase-popup__product {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 0.1rem 0;
+    }
+
+    .purchase-popup__meta {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.72rem;
+      opacity: 0.55;
+      margin: 0;
+    }
+
+    .purchase-popup__meta svg {
+      width: 0.75rem;
+      height: 0.75rem;
+    }
+
+    @media screen and (max-width: 749px) {
+      .purchase-popup {
+        max-width: calc(100vw - 2rem);
+      }
+    }
+  {% endstylesheet %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:general.purchase_popup",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable",
+      "label": "t:labels.enable_popup",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "t:labels.position",
+      "options": [
+        { "value": "bottom-left", "label": "t:labels.bottom_left" },
+        { "value": "bottom-right", "label": "t:labels.bottom_right" }
+      ],
+      "default": "bottom-left"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:labels.collection",
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "locations",
+      "label": "t:labels.locations",
+      "default": "New York, US; Austin, US; Toronto, CA; London, UK"
+    },
+    {
+      "type": "range",
+      "id": "display_seconds",
+      "label": "t:labels.display_seconds",
+      "min": 3,
+      "max": 15,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "interval_seconds",
+      "label": "t:labels.interval_seconds",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "default": 12
+    }
+  ]
+}
+{% endschema %}

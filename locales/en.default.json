@@ -7,6 +7,11 @@
     "cart": "Cart",
     "product": "Product",
     "close": "Close",
+    "someone_purchased": "Someone just purchased!",
+    "minutes_ago": {
+      "one": "{{ count }} minute ago",
+      "other": "{{ count }} minutes ago"
+    },
     "newsletter": {
       "email_placeholder": "Your email",
       "submit": "Subscribe",
