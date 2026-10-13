@@ -1,0 +1,18 @@
+{
+  "type": "overlay",
+  "name": "t:general.overlays",
+  "sections": {
+    "newsletter-popup": {
+      "type": "newsletter-popup",
+      "settings": {}
+    },
+    "purchase-popup": {
+      "type": "purchase-popup",
+      "settings": {}
+    }
+  },
+  "order": [
+    "newsletter-popup",
+    "purchase-popup"
+  ]
+}
