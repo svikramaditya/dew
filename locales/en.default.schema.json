@@ -57,7 +57,9 @@
     "purchase_popup": "Recent purchase popup",
     "freshly_picked": "Freshly picked",
     "video": "Video",
-    "kit_bundle": "Kit / bundle"
+    "kit_bundle": "Kit / bundle",
+    "you_may_also_like": "You may also like",
+    "recently_viewed": "Recently viewed"
   },
   "labels": {
     "alignment": "Alignment",
@@ -139,6 +141,16 @@
     "email": "Email",
     "address": "Address",
     "menu_title": "Column title",
+    "gallery_layout": "Gallery layout",
+    "gallery_horizontal": "Horizontal thumbnails",
+    "gallery_vertical": "Vertical thumbnails",
+    "gallery_stacked": "Stacked (no thumbnails)",
+    "swatch_shape": "Swatch shape",
+    "round": "Round",
+    "square": "Square",
+    "accordion": "Accordion",
+    "title": "Title",
+    "content": "Content",
     "media_type": "Media type",
     "enable_ripple": "Enable water-ripple effect on this image",
     "badge_text": "Badge text",

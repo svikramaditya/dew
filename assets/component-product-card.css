@@ -130,14 +130,6 @@
   transition: none;
 }
 
-.product-card__quick-action[data-wishlist-toggle].is-active {
-  color: #c0552f;
-}
-
-.product-card__quick-action[data-wishlist-toggle].is-active svg {
-  fill: currentcolor;
-}
-
 .product-card__add {
   position: absolute;
   left: 0.75rem;
@@ -312,4 +304,141 @@
   font-size: 0.85rem;
   text-decoration: underline;
   color: var(--color-text);
+}
+
+/* Variant options + swatches -- shared between the real PDP (sections/product.liquid)
+   and the JS-rendered quick-view modal, which lives outside any section's scoped
+   stylesheet, so these rules have to be global. */
+.product__label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.65;
+  margin-top: 0.9rem;
+  display: block;
+}
+
+.product__label span {
+  text-transform: none;
+  opacity: 1;
+  font-weight: 600;
+}
+
+.product__option-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.product__option-value {
+  border: var(--border-thickness) solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-background);
+  padding: 0.5rem 0.95rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.product__option-value.is-selected {
+  border-color: var(--color-text);
+  font-weight: 600;
+}
+
+.product__option-value[disabled],
+.product__option-value.is-unavailable {
+  opacity: 0.35;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.product__option-values--swatch {
+  gap: 0.6rem;
+}
+
+.product__option-values--swatch .product__option-value {
+  padding: 0;
+  border: none;
+  background: none;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.product__option-values--round .product__option-value-swatch,
+.product__option-values--round .product__option-value-image {
+  border-radius: 999px;
+}
+
+.product__option-values--square .product__option-value-swatch,
+.product__option-values--square .product__option-value-image {
+  border-radius: var(--radius-input);
+}
+
+.product__option-value-swatch {
+  width: 100%;
+  height: 100%;
+  background: var(--swatch-color, #ccc);
+  border: var(--border-thickness) solid var(--color-border);
+}
+
+.product__option-value-image {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: var(--border-thickness) solid var(--color-border);
+}
+
+.product__option-value-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product__option-values--swatch .product__option-value.is-selected::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: var(--border-thickness) solid var(--color-text);
+  border-radius: inherit;
+}
+
+.product__availability {
+  font-size: 0.82rem;
+  color: #b23b3b;
+  margin: 0.5rem 0 0;
+}
+
+.quick-view-modal__quantity-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.quick-view-modal__quantity {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: var(--border-thickness) solid var(--color-border);
+  border-radius: var(--radius-button);
+  padding: 0.3rem 0.6rem;
+}
+
+.quick-view-modal__quantity button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text);
+  display: flex;
+  padding: 0.2rem;
+}
+
+.quick-view-modal__quantity svg {
+  width: 0.8rem;
+  height: 0.8rem;
 }

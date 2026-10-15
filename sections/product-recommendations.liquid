@@ -1,0 +1,69 @@
+{%- liquid
+  assign loading_strategy = 'lazy'
+  unless settings.enable_lazy_loading
+    assign loading_strategy = 'eager'
+  endunless
+-%}
+{%- if recommendations.performed and recommendations.products.size > 0 -%}
+  <div class="product-recs color-{{ section.settings.color_scheme }} full-width" data-product-recommendations>
+    <div class="product-recs__inner">
+      <h2 class="product-recs__heading">{{ 'products.you_may_also_like' | t }}</h2>
+      <ul class="product-recs__grid">
+        {%- for product in recommendations.products limit: section.settings.products_to_show -%}
+          <li>{% render 'product-card', product: product, card_product_loading: loading_strategy %}</li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+
+  {% stylesheet %}
+    .product-recs__inner {
+      max-width: var(--page-width);
+      margin: 0 auto;
+      padding: var(--section-spacing) var(--page-margin);
+    }
+
+    .product-recs__heading {
+      font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+      margin: 0 0 2rem;
+    }
+
+    .product-recs__grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--grid-gap);
+    }
+
+    @media screen and (min-width: 700px) {
+      .product-recs__grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+  {% endstylesheet %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:general.you_may_also_like",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "t:labels.products_to_show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    }
+  ]
+}
+{% endschema %}

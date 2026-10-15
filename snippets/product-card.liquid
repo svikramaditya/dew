@@ -67,9 +67,6 @@
         <button type="button" class="product-card__quick-action" data-quick-view="{{ product.handle }}" aria-label="{{ 'products.quick_view' | t }}">
           {{ 'icon-eye.svg' | inline_asset_content }}
         </button>
-        <button type="button" class="product-card__quick-action" data-wishlist-toggle="{{ product.id }}" aria-label="{{ 'products.add_to_wishlist' | t }}">
-          {{ 'icon-heart.svg' | inline_asset_content }}
-        </button>
       </span>
 
       {%- if product.available -%}

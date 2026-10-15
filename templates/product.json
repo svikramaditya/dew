@@ -12,9 +12,16 @@
     "main": {
       "type": "product",
       "settings": {}
+    },
+    "recently-viewed": {
+      "type": "recently-viewed",
+      "settings": {
+        "color_scheme": "scheme-2"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "recently-viewed"
   ]
 }

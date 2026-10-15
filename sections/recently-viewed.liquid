@@ -1,0 +1,54 @@
+<recently-viewed
+  class="product-recs color-{{ section.settings.color_scheme }} full-width"
+  data-exclude="{{ product.id }}"
+  hidden
+>
+  <div class="product-recs__inner">
+    <h2 class="product-recs__heading">{{ 'products.recently_viewed' | t }}</h2>
+    <ul class="product-recs__grid" data-recently-viewed-grid></ul>
+  </div>
+</recently-viewed>
+
+<script src="{{ 'component-recently-viewed.js' | asset_url }}" defer="defer"></script>
+
+{% stylesheet %}
+  .product-recs__inner {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: var(--section-spacing) var(--page-margin);
+  }
+
+  .product-recs__heading {
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+    margin: 0 0 2rem;
+  }
+
+  .product-recs__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--grid-gap);
+  }
+
+  @media screen and (min-width: 700px) {
+    .product-recs__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.recently_viewed",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}
