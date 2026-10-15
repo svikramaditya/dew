@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero-slider": {
@@ -34,7 +43,10 @@
           }
         }
       },
-      "block_order": ["slide-1", "slide-2"],
+      "block_order": [
+        "slide-1",
+        "slide-2"
+      ],
       "settings": {
         "transition_style": "fade",
         "autoplay": true,
@@ -102,7 +114,12 @@
           }
         }
       },
-      "block_order": ["q1", "q2", "q3", "q4"],
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
       "settings": {
         "color_scheme": "scheme-1"
       }
@@ -125,18 +142,28 @@
       "blocks": {
         "p1": {
           "type": "product",
-          "settings": { "product": "gid://shopify/Product/15424239632604" }
+          "settings": {
+            "product": "gid://shopify/product/15424239632604"
+          }
         },
         "p2": {
           "type": "product",
-          "settings": { "product": "gid://shopify/Product/15424239730908" }
+          "settings": {
+            "product": "gid://shopify/product/15424239730908"
+          }
         },
         "p3": {
           "type": "product",
-          "settings": { "product": "gid://shopify/Product/15424239468764" }
+          "settings": {
+            "product": "gid://shopify/product/15424239468764"
+          }
         }
       },
-      "block_order": ["p1", "p2", "p3"],
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ],
       "settings": {
         "color_scheme": "scheme-2",
         "heading": "The starter kit",
