@@ -1,41 +1,70 @@
 <footer class="footer color-{{ section.settings.color_scheme }} full-width">
   <div class="footer__inner">
-    <div class="footer__top">
-      <div class="footer__brand">
-        <a href="{{ routes.root_url }}" class="footer__logo">{{ shop.name }}</a>
+    <div class="footer__newsletter-row">
+      <div>
+        {%- if section.settings.newsletter_heading != blank -%}
+          <h2 class="footer__newsletter-heading">{{ section.settings.newsletter_heading }}</h2>
+        {%- endif -%}
         {%- if section.settings.tagline != blank -%}
           <p class="footer__tagline">{{ section.settings.tagline }}</p>
         {%- endif -%}
       </div>
+      {% form 'customer', class: 'footer__newsletter-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <label class="visually-hidden" for="Footer-Newsletter-{{ section.id }}">{{ 'general.newsletter.email_placeholder' | t }}</label>
+        <input
+          type="email"
+          name="contact[email]"
+          id="Footer-Newsletter-{{ section.id }}"
+          placeholder="{{ 'general.newsletter.email_placeholder' | t }}"
+          required
+        >
+        <button type="submit">{{ 'general.newsletter.submit' | t }}</button>
+        {%- if form.posted_successfully? -%}
+          <p class="footer__newsletter-success">{{ 'general.newsletter.success' | t }}</p>
+        {%- endif -%}
+      {% endform %}
+    </div>
+
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="{{ routes.root_url }}" class="footer__logo">{{ shop.name }}</a>
+        {%- if section.settings.contact_phone != blank -%}
+          <p class="footer__contact-line">{{ 'icon-phone.svg' | inline_asset_content }} {{ section.settings.contact_phone }}</p>
+        {%- endif -%}
+        {%- if section.settings.contact_email != blank -%}
+          <p class="footer__contact-line">{{ 'icon-mail.svg' | inline_asset_content }} {{ section.settings.contact_email }}</p>
+        {%- endif -%}
+        {%- if section.settings.contact_address != blank -%}
+          <p class="footer__contact-line">{{ 'icon-pin.svg' | inline_asset_content }} {{ section.settings.contact_address }}</p>
+        {%- endif -%}
+      </div>
 
       <div class="footer__column">
-        <p class="footer__heading">{{ 'general.menu' | t }}</p>
+        <p class="footer__heading">{{ section.settings.shop_menu_title }}</p>
         <ul class="footer__links">
-          {%- for link in section.settings.menu.links -%}
+          {%- for link in section.settings.shop_menu.links -%}
             <li><a href="{{ link.url }}">{{ link.title }}</a></li>
           {%- endfor -%}
         </ul>
       </div>
 
-      <div class="footer__column footer__newsletter">
-        {%- if section.settings.newsletter_heading != blank -%}
-          <p class="footer__heading">{{ section.settings.newsletter_heading }}</p>
-        {%- endif -%}
-        {% form 'customer', class: 'footer__newsletter-form' %}
-          <input type="hidden" name="contact[tags]" value="newsletter">
-          <label class="visually-hidden" for="Footer-Newsletter-{{ section.id }}">{{ 'general.newsletter.email_placeholder' | t }}</label>
-          <input
-            type="email"
-            name="contact[email]"
-            id="Footer-Newsletter-{{ section.id }}"
-            placeholder="{{ 'general.newsletter.email_placeholder' | t }}"
-            required
-          >
-          <button type="submit">{{ 'general.newsletter.submit' | t }}</button>
-          {%- if form.posted_successfully? -%}
-            <p class="footer__newsletter-success">{{ 'general.newsletter.success' | t }}</p>
-          {%- endif -%}
-        {% endform %}
+      <div class="footer__column">
+        <p class="footer__heading">{{ section.settings.support_menu_title }}</p>
+        <ul class="footer__links">
+          {%- for link in section.settings.support_menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div class="footer__column">
+        <p class="footer__heading">{{ section.settings.about_menu_title }}</p>
+        <ul class="footer__links">
+          {%- for link in section.settings.about_menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
       </div>
     </div>
 
@@ -51,6 +80,21 @@
           {%- endfor -%}
         </ul>
       {%- endif -%}
+
+      <div class="footer__social">
+        {%- if section.settings.instagram_url != blank -%}
+          <a href="{{ section.settings.instagram_url }}" aria-label="Instagram">{{ 'icon-instagram.svg' | inline_asset_content }}</a>
+        {%- endif -%}
+        {%- if section.settings.facebook_url != blank -%}
+          <a href="{{ section.settings.facebook_url }}" aria-label="Facebook">{{ 'icon-facebook.svg' | inline_asset_content }}</a>
+        {%- endif -%}
+        {%- if section.settings.tiktok_url != blank -%}
+          <a href="{{ section.settings.tiktok_url }}" aria-label="TikTok">{{ 'icon-tiktok.svg' | inline_asset_content }}</a>
+        {%- endif -%}
+        {%- if section.settings.twitter_url != blank -%}
+          <a href="{{ section.settings.twitter_url }}" aria-label="X">{{ 'icon-twitter.svg' | inline_asset_content }}</a>
+        {%- endif -%}
+      </div>
 
       {%- if section.settings.show_payment_icons -%}
         <div class="footer__payment">
@@ -70,9 +114,63 @@
     padding: var(--section-spacing) var(--page-margin) 2rem;
   }
 
+  .footer__newsletter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-bottom: 2.5rem;
+    margin-bottom: 2.5rem;
+    border-bottom: var(--border-thickness) solid var(--color-border);
+  }
+
+  .footer__newsletter-heading {
+    font-size: 1.6rem;
+    margin: 0 0 0.4rem;
+  }
+
+  .footer__tagline {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin: 0;
+    max-width: 24rem;
+  }
+
+  .footer__newsletter-form {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .footer__newsletter-form input {
+    flex: 1;
+    min-width: 14rem;
+    padding: 0.75rem 0.9rem;
+    border: var(--border-thickness) solid var(--color-border);
+    border-radius: var(--radius-input);
+    background: transparent;
+    color: var(--color-text);
+  }
+
+  .footer__newsletter-form button {
+    padding: 0.75rem 1.3rem;
+    border: none;
+    border-radius: var(--radius-button);
+    background: var(--color-button);
+    color: var(--color-button-label);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .footer__newsletter-success {
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+  }
+
   .footer__top {
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1.2fr;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
     gap: 2.5rem;
     padding-bottom: 2.5rem;
     border-bottom: var(--border-thickness) solid var(--color-border);
@@ -80,24 +178,34 @@
 
   @media screen and (max-width: 749px) {
     .footer__top {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 2rem;
     }
   }
 
   .footer__logo {
+    display: block;
     font-family: var(--font-heading--family);
     font-weight: 600;
     font-size: 1.3rem;
     text-decoration: none;
     color: var(--color-text);
+    margin-bottom: 0.9rem;
   }
 
-  .footer__tagline {
-    margin-top: 0.75rem;
-    font-size: 0.9rem;
+  .footer__contact-line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
     opacity: 0.75;
-    max-width: 22rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .footer__contact-line svg {
+    width: 0.9rem;
+    height: 0.9rem;
+    flex-shrink: 0;
   }
 
   .footer__heading {
@@ -121,35 +229,7 @@
     text-decoration: none;
     color: var(--color-text);
     font-size: 0.9rem;
-  }
-
-  .footer__newsletter-form {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .footer__newsletter-form input {
-    flex: 1;
-    padding: 0.65rem 0.9rem;
-    border: var(--border-thickness) solid var(--color-border);
-    border-radius: var(--radius-input);
-    background: transparent;
-    color: var(--color-text);
-  }
-
-  .footer__newsletter-form button {
-    padding: 0.65rem 1.2rem;
-    border: none;
-    border-radius: var(--radius-button);
-    background: var(--color-button);
-    color: var(--color-button-label);
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
-  .footer__newsletter-success {
-    margin-top: 0.6rem;
-    font-size: 0.85rem;
+    opacity: 0.85;
   }
 
   .footer__bottom {
@@ -177,6 +257,21 @@
     text-decoration: none;
   }
 
+  .footer__social {
+    display: flex;
+    gap: 0.9rem;
+  }
+
+  .footer__social a {
+    color: var(--color-text);
+    display: flex;
+  }
+
+  .footer__social svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
   .footer__payment {
     display: flex;
     gap: 0.5rem;
@@ -200,20 +295,84 @@
     },
     {
       "type": "text",
+      "id": "newsletter_heading",
+      "label": "t:labels.heading",
+      "default": "Join our beauty circle"
+    },
+    {
+      "type": "text",
       "id": "tagline",
-      "label": "t:labels.description"
+      "label": "t:labels.description",
+      "default": "Exclusive offers, skin tips, and early product drops."
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "t:labels.phone"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "t:labels.email"
+    },
+    {
+      "type": "text",
+      "id": "contact_address",
+      "label": "t:labels.address"
+    },
+    {
+      "type": "text",
+      "id": "shop_menu_title",
+      "label": "t:labels.menu_title",
+      "default": "Shop by category"
     },
     {
       "type": "link_list",
-      "id": "menu",
+      "id": "shop_menu",
+      "label": "t:labels.menu"
+    },
+    {
+      "type": "text",
+      "id": "support_menu_title",
+      "label": "t:labels.menu_title",
+      "default": "Customer care"
+    },
+    {
+      "type": "link_list",
+      "id": "support_menu",
       "label": "t:labels.menu",
       "default": "footer"
     },
     {
       "type": "text",
-      "id": "newsletter_heading",
-      "label": "t:labels.heading",
-      "default": "Join the list"
+      "id": "about_menu_title",
+      "label": "t:labels.menu_title",
+      "default": "About & resources"
+    },
+    {
+      "type": "link_list",
+      "id": "about_menu",
+      "label": "t:labels.menu"
+    },
+    {
+      "type": "text",
+      "id": "instagram_url",
+      "label": "t:labels.instagram_url"
+    },
+    {
+      "type": "text",
+      "id": "facebook_url",
+      "label": "t:labels.facebook_url"
+    },
+    {
+      "type": "text",
+      "id": "tiktok_url",
+      "label": "t:labels.tiktok_url"
+    },
+    {
+      "type": "text",
+      "id": "twitter_url",
+      "label": "t:labels.twitter_url"
     },
     {
       "type": "checkbox",

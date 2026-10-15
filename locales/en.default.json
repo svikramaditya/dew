@@ -24,6 +24,7 @@
     "back_to_shopping": "Back to shopping"
   },
   "blog": {
+    "read_article": "Read article",
     "article_comments": "Comments",
     "article_metadata_html": "{{ date }} by {{ author }}",
     "comment_form_body": "Comment",
