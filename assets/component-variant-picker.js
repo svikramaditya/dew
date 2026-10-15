@@ -1,16 +1,19 @@
 class VariantPicker extends HTMLElement {
   connectedCallback() {
     this.variants = JSON.parse(this.dataset.productJson.replace(/&#39;/g, "'"));
-    // Real PDP renders this inside a <form>; quick-view renders it inside a
-    // plain modal body with no form (add-to-cart happens via a button's
-    // data-quick-add attribute instead of a form submit) -- support both.
-    this.container = this.closest('form') || this.closest('.quick-view-modal__info') || this.parentElement;
-    this.input = this.container.querySelector('[data-product-variant-id]');
-    this.priceEl = this.container.querySelector('[data-product-price]');
-    this.compareEl = this.container.querySelector('[data-product-price-compare]');
-    this.availabilityEl = this.container.querySelector('[data-product-availability]');
-    this.submitBtn = this.container.querySelector('[data-product-submit]');
-    this.submitBtnText = this.container.querySelector('[data-product-button-text]');
+    // Price/title live as siblings of the <form> on the real PDP (inside
+    // .product__info), but the form itself only wraps the variant id input
+    // and the submit button -- so price/availability lookups need the wider
+    // wrapper, while the form-only elements stay scoped to the form. Quick
+    // view has no <form> at all, so .quick-view-modal__info covers both.
+    this.form = this.closest('form');
+    this.wrapper = this.closest('.product__info') || this.closest('.quick-view-modal__info') || this.form || this.parentElement;
+    this.input = (this.form || this.wrapper).querySelector('[data-product-variant-id]');
+    this.priceEl = this.wrapper.querySelector('[data-product-price]');
+    this.compareEl = this.wrapper.querySelector('[data-product-price-compare]');
+    this.availabilityEl = this.wrapper.querySelector('[data-product-availability]');
+    this.submitBtn = this.wrapper.querySelector('[data-product-submit]');
+    this.submitBtnText = this.wrapper.querySelector('[data-product-button-text]');
 
     this.addEventListener('click', (event) => {
       const btn = event.target.closest('[data-option-value]');
