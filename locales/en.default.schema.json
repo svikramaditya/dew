@@ -124,6 +124,8 @@
     "display_seconds": "Display duration (seconds)",
     "interval_seconds": "Time between popups (seconds)",
     "locations": "Locations (semicolon-separated)",
+    "tab1_label": "Tab 1 label",
+    "tab2_label": "Tab 2 label",
     "media_type": "Media type",
     "enable_ripple": "Enable water-ripple effect on this image",
     "badge_text": "Badge text",

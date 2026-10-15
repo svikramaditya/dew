@@ -1,0 +1,226 @@
+{%- liquid
+  assign loading_strategy = 'lazy'
+  unless settings.enable_lazy_loading
+    assign loading_strategy = 'eager'
+  endunless
+  assign original_total = 0
+  assign bundle_total = 0
+  for block in section.blocks
+    assign item_compare_price = block.settings.product.compare_at_price | default: block.settings.product.price
+    assign original_total = original_total | plus: item_compare_price
+    assign bundle_total = bundle_total | plus: block.settings.product.price
+  endfor
+-%}
+<div class="kit-bundle color-{{ section.settings.color_scheme }} full-width">
+  <div class="kit-bundle__inner">
+    <div class="kit-bundle__media">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1200 | image_tag: loading: loading_strategy, alt: section.settings.heading, class: 'kit-bundle__image' }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg kit-bundle__image' }}
+      {%- endif -%}
+    </div>
+
+    <div class="kit-bundle__content">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="kit-bundle__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.description != blank -%}
+        <p class="kit-bundle__description">{{ section.settings.description }}</p>
+      {%- endif -%}
+
+      <ul class="kit-bundle__list">
+        {%- for block in section.blocks -%}
+          {%- assign product = block.settings.product -%}
+          <li class="kit-bundle__item" {{ block.shopify_attributes }}>
+            <span class="kit-bundle__item-media">
+              {%- if product.featured_image != blank -%}
+                {{ product.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: product.title }}
+              {%- endif -%}
+            </span>
+            <span class="kit-bundle__item-content">
+              <span class="kit-bundle__item-title">{{ product.title }}</span>
+              <span class="kit-bundle__item-price">{{ product.price | money }}</span>
+            </span>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if section.blocks.size > 0 -%}
+        {%- capture variant_ids -%}
+          {%- for block in section.blocks -%}{{ block.settings.product.selected_or_first_available_variant.id }}{% unless forloop.last %},{% endunless %}{%- endfor -%}
+        {%- endcapture -%}
+        {%- assign variant_ids = variant_ids | strip -%}
+        <button type="button" class="kit-bundle__button" data-bundle-add="{{ variant_ids }}">
+          {{ 'labels.add_to_cart' | t }} &mdash; {{ bundle_total | money }}
+          {%- if original_total > bundle_total -%}
+            <s>{{ original_total | money }}</s>
+          {%- endif -%}
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .kit-bundle__inner {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: var(--section-spacing) var(--page-margin);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  @media screen and (min-width: 900px) {
+    .kit-bundle__inner {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+
+  .kit-bundle__media {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+
+  .kit-bundle__image,
+  .kit-bundle__media svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .kit-bundle__heading {
+    font-size: clamp(1.8rem, 1.4rem + 1.6vw, 2.6rem);
+    margin: 0 0 0.75rem;
+  }
+
+  .kit-bundle__description {
+    font-size: 1rem;
+    opacity: 0.75;
+    margin: 0 0 1.5rem;
+    max-width: 30rem;
+  }
+
+  .kit-bundle__list {
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .kit-bundle__item {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr;
+    gap: 0.9rem;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: var(--border-thickness) solid var(--color-border);
+  }
+
+  .kit-bundle__item-media {
+    display: block;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: var(--radius-input);
+    overflow: hidden;
+    background: color-mix(in srgb, var(--color-border) 40%, transparent);
+  }
+
+  .kit-bundle__item-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .kit-bundle__item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .kit-bundle__item-title {
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .kit-bundle__item-price {
+    font-size: 0.82rem;
+    opacity: 0.6;
+  }
+
+  .kit-bundle__button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 1rem;
+    border: none;
+    border-radius: var(--radius-button);
+    background: var(--color-button);
+    color: var(--color-button-label);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .kit-bundle__button s {
+    opacity: 0.6;
+    font-weight: 400;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.kit_bundle",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "The starter kit"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "t:labels.description",
+      "default": "Your perfect routine, bundled -- built to boost radiance and hydration from the very first week."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "t:labels.product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:labels.product"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "t:general.kit_bundle"
+    }
+  ]
+}
+{% endschema %}

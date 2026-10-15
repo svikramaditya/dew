@@ -34,6 +34,28 @@
       return;
     }
 
+    const bundleAdd = event.target.closest('[data-bundle-add]');
+    if (bundleAdd) {
+      event.preventDefault();
+      const ids = bundleAdd.dataset.bundleAdd.split(',').filter(Boolean);
+      bundleAdd.disabled = true;
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ items: ids.map((id) => ({ id, quantity: 1 })) }),
+      })
+        .then((res) => res.json())
+        .then(() => {
+          const drawer = document.querySelector('cart-drawer');
+          if (drawer) {
+            drawer.refresh();
+            drawer.open();
+          }
+        })
+        .finally(() => { bundleAdd.disabled = false; });
+      return;
+    }
+
     const quickAdd = event.target.closest('[data-quick-add]');
     if (quickAdd && !quickAdd.closest('.cart-drawer__recommendation')) {
       event.preventDefault();

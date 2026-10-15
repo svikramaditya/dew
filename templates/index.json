@@ -106,6 +106,52 @@
       "settings": {
         "color_scheme": "scheme-1"
       }
+    },
+    "freshly-picked": {
+      "type": "freshly-picked",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "heading": "Freshly picked for you",
+        "description": "Discover our newest formulas made to nourish, hydrate, and glow.",
+        "tab1_label": "Featured",
+        "tab1_collection": "all",
+        "tab2_label": "New arrivals",
+        "tab2_collection": "all",
+        "products_to_show": 4
+      }
+    },
+    "kit-bundle": {
+      "type": "kit-bundle",
+      "blocks": {
+        "p1": {
+          "type": "product",
+          "settings": { "product": "gid://shopify/Product/15424239632604" }
+        },
+        "p2": {
+          "type": "product",
+          "settings": { "product": "gid://shopify/Product/15424239730908" }
+        },
+        "p3": {
+          "type": "product",
+          "settings": { "product": "gid://shopify/Product/15424239468764" }
+        }
+      },
+      "block_order": ["p1", "p2", "p3"],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "heading": "The starter kit",
+        "description": "Your perfect morning ritual to boost radiance and hydration -- bundled, so you never have to think about what's next."
+      }
+    },
+    "video": {
+      "type": "video",
+      "settings": {
+        "color_scheme": "scheme-3",
+        "eyebrow": "Our story",
+        "heading": "Begins with a drop",
+        "button_label": "Learn more about us",
+        "button_link": "/pages/about"
+      }
     }
   },
   "order": [
@@ -113,6 +159,9 @@
     "featured-collection",
     "philosophy",
     "horizontal-scroll",
+    "freshly-picked",
+    "kit-bundle",
+    "video",
     "faq"
   ]
 }

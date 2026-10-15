@@ -1,0 +1,170 @@
+{%- liquid
+  assign loading_strategy = 'lazy'
+  unless settings.enable_lazy_loading
+    assign loading_strategy = 'eager'
+  endunless
+  assign tab1_collection = collections[section.settings.tab1_collection]
+  assign tab2_collection = collections[section.settings.tab2_collection]
+-%}
+<div class="freshly-picked color-{{ section.settings.color_scheme }} full-width">
+  <div class="freshly-picked__inner">
+    <div class="freshly-picked__header">
+      <div>
+        {%- if section.settings.heading != blank -%}
+          <h2 class="freshly-picked__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <p class="freshly-picked__description">{{ section.settings.description }}</p>
+        {%- endif -%}
+      </div>
+      <freshly-picked-tabs class="freshly-picked__tabs">
+        <button type="button" class="freshly-picked__tab is-active" data-tab-trigger="0">{{ section.settings.tab1_label }}</button>
+        <button type="button" class="freshly-picked__tab" data-tab-trigger="1">{{ section.settings.tab2_label }}</button>
+      </freshly-picked-tabs>
+    </div>
+
+    <ul class="freshly-picked__grid" data-tab-panel="0">
+      {%- for product in tab1_collection.products limit: section.settings.products_to_show -%}
+        <li>{% render 'product-card', product: product, card_product_loading: loading_strategy %}</li>
+      {%- endfor -%}
+    </ul>
+    <ul class="freshly-picked__grid" data-tab-panel="1" hidden>
+      {%- for product in tab2_collection.products limit: section.settings.products_to_show -%}
+        <li>{% render 'product-card', product: product, card_product_loading: loading_strategy %}</li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+<script src="{{ 'component-tabs.js' | asset_url }}" defer="defer"></script>
+
+{% stylesheet %}
+  .freshly-picked__inner {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: var(--section-spacing) var(--page-margin);
+  }
+
+  .freshly-picked__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .freshly-picked__heading {
+    font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.4rem);
+    margin: 0 0 0.6rem;
+  }
+
+  .freshly-picked__description {
+    font-size: 1rem;
+    opacity: 0.75;
+    max-width: 32rem;
+    margin: 0;
+  }
+
+  .freshly-picked__tabs {
+    display: flex;
+    gap: 1.75rem;
+  }
+
+  .freshly-picked__tab {
+    background: none;
+    border: none;
+    padding: 0 0 0.3rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    color: var(--color-text);
+  }
+
+  .freshly-picked__tab.is-active {
+    opacity: 1;
+    border-bottom-color: var(--color-text);
+  }
+
+  .freshly-picked__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--grid-gap);
+  }
+
+  @media screen and (min-width: 700px) {
+    .freshly-picked__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.freshly_picked",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Freshly picked for you"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "t:labels.description",
+      "default": "Discover our newest formulas made to nourish, hydrate, and glow."
+    },
+    {
+      "type": "text",
+      "id": "tab1_label",
+      "label": "t:labels.tab1_label",
+      "default": "Featured"
+    },
+    {
+      "type": "collection",
+      "id": "tab1_collection",
+      "label": "t:labels.collection",
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "tab2_label",
+      "label": "t:labels.tab2_label",
+      "default": "New arrivals"
+    },
+    {
+      "type": "collection",
+      "id": "tab2_collection",
+      "label": "t:labels.collection",
+      "default": "all"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "t:labels.products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.freshly_picked"
+    }
+  ]
+}
+{% endschema %}
