@@ -49,8 +49,8 @@ class VariantPicker extends HTMLElement {
       this.submitBtn.dataset.quickAdd = match.id;
     }
     if (this.priceEl) {
-      const priceNode = this.priceEl.childNodes[0];
-      if (priceNode) priceNode.textContent = this.formatMoney(match.price) + ' ';
+      const amountEl = this.priceEl.querySelector('[data-price-amount]');
+      if (amountEl) amountEl.textContent = this.formatMoney(match.price);
     }
     if (this.compareEl) {
       if (match.compare_at_price && match.compare_at_price > match.price) {
