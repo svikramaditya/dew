@@ -5,7 +5,7 @@
     {%- elsif section.settings.cover_image != blank -%}
       {{ section.settings.cover_image | image_url: width: 1600 | image_tag: loading: 'lazy', alt: section.settings.heading, class: 'video-section__image' }}
     {%- else -%}
-      {{ 'hero-1' | placeholder_svg_tag: 'placeholder-svg video-section__image' }}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg video-section__image' }}
     {%- endif -%}
     <div class="video-section__overlay">
       {%- if section.settings.eyebrow != blank -%}
