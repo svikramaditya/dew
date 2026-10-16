@@ -153,7 +153,7 @@
     </div>
   </div>
 
-  <div data-product-recommendations-mount></div>
+  <div data-product-recommendations-mount data-url="{{ routes.product_recommendations_url }}?section_id=product-recommendations&product_id={{ product.id }}&limit=4&intent=related"></div>
   <span data-current-product-handle="{{ product.handle }}" hidden></span>
 </div>
 
@@ -164,7 +164,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     var mount = document.querySelector('[data-product-recommendations-mount]');
     if (!mount) return;
-    fetch('/products/{{ product.id }}/recommendations?section_id=product-recommendations&limit=4&intent=related')
+    fetch(mount.dataset.url)
       .then(function (res) { return res.text(); })
       .then(function (html) {
         var doc = new DOMParser().parseFromString(html, 'text/html');

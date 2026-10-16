@@ -107,8 +107,7 @@
     const firstAvailable = variants.find((v) => v.available) || variants[0];
     const image = product.featured_image || (product.images && product.images[0]);
 
-    const optionsHtml = product.options_with_values.map((option, index) => {
-      const hasSwatch = option.values.some((v) => v && typeof v === 'object' && v.swatch);
+    const optionsHtml = product.options.map((option, index) => {
       // Shopify's /products/{handle}.js endpoint returns option values as plain
       // strings (no swatch data) -- swatches are only available through Liquid
       // on the real product page, so quick-view falls back to text pills here.
@@ -136,7 +135,7 @@
           ${formatMoney(firstAvailable.price)}
         </p>
         <p>${product.description.replace(/<[^>]*>/g, '').slice(0, 160)}</p>
-        ${product.has_only_default_variant ? '' : `<variant-picker class="product__options" data-product-json='${JSON.stringify(variants).replace(/'/g, '&#39;')}'>${optionsHtml}</variant-picker>`}
+        ${variants.length > 1 ? `<variant-picker class="product__options" data-product-json='${JSON.stringify(variants).replace(/'/g, '&#39;')}'>${optionsHtml}</variant-picker>` : ''}
         <p class="product__availability" data-product-availability hidden>Sorry, this combination is sold out.</p>
         <div class="quick-view-modal__quantity-row">
           <div class="quick-view-modal__quantity">
