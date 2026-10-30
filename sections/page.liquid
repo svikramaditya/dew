@@ -2,16 +2,368 @@
   This section is used in the page template to render store pages like About us
   or Contact us.
 
+  The "contact" page handle gets a native contact form (name/email/
+  phone/message, no app) instead of just page.content, matching the
+  built-in handling most themes give this one specific page - same
+  reason Dawn's main-page.liquid special-cases it: a merchant
+  shouldn't have to hand-build a form in the page body just to get a
+  working Contact page.
+
   https://shopify.dev/docs/storefronts/themes/architecture/templates/page
 {% endcomment %}
+<div class="color-{{ section.settings.color_scheme }} full-width">
+  <div class="page__inner">
+    {%- if page.handle == 'contact' -%}
+      <div class="contact__header">
+        {%- if section.settings.contact_eyebrow != blank -%}
+          <p class="contact__eyebrow">{{ section.settings.contact_eyebrow }}</p>
+        {%- endif -%}
+        <h1 class="page__title">{{ page.title }}</h1>
+        {%- if section.settings.contact_description != blank -%}
+          <div class="contact__description">{{ section.settings.contact_description }}</div>
+        {%- endif -%}
+      </div>
 
-<h1>{{ page.title }}</h1>
+      <div class="contact__grid">
+        <div class="contact__details">
+          {%- if section.settings.contact_email != blank -%}
+            <a href="mailto:{{ section.settings.contact_email }}" class="contact__detail">
+              {{ 'icon-mail.svg' | inline_asset_content }}
+              {{ section.settings.contact_email }}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.contact_phone != blank -%}
+            <a href="tel:{{ section.settings.contact_phone | remove: ' ' }}" class="contact__detail">
+              {{ 'icon-phone.svg' | inline_asset_content }}
+              {{ section.settings.contact_phone }}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.contact_address != blank -%}
+            <p class="contact__detail">
+              {{ 'icon-pin.svg' | inline_asset_content }}
+              {{ section.settings.contact_address }}
+            </p>
+          {%- endif -%}
+          {%- if section.settings.contact_hours != blank -%}
+            <p class="contact__detail contact__detail--text">{{ section.settings.contact_hours }}</p>
+          {%- endif -%}
 
-{{ page.content }}
+          {%- if section.settings.contact_instagram_url != blank or section.settings.contact_facebook_url != blank -%}
+            <div class="contact__social">
+              {%- if section.settings.contact_instagram_url != blank -%}
+                <a href="{{ section.settings.contact_instagram_url }}" aria-label="Instagram">{{ 'icon-instagram.svg' | inline_asset_content }}</a>
+              {%- endif -%}
+              {%- if section.settings.contact_facebook_url != blank -%}
+                <a href="{{ section.settings.contact_facebook_url }}" aria-label="Facebook">{{ 'icon-facebook.svg' | inline_asset_content }}</a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="contact__form-wrap">
+          {%- form 'contact', class: 'contact__form' -%}
+            {%- if form.posted_successfully? -%}
+              <p class="contact__message contact__message--success" tabindex="-1" autofocus>
+                {{ 'general.contact.success' | t }}
+              </p>
+            {%- else -%}
+              {%- if form.errors -%}
+                <p class="contact__message contact__message--error" tabindex="-1" autofocus>
+                  {{ 'general.contact.error' | t }}
+                </p>
+              {%- endif -%}
+
+              <div class="contact__field-row">
+                <div class="contact__field">
+                  <label class="contact__label" for="ContactName">{{ 'general.contact.name' | t }}</label>
+                  <input
+                    type="text"
+                    id="ContactName"
+                    class="contact__input"
+                    name="contact[name]"
+                    value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+                    autocomplete="name"
+                  >
+                </div>
+                <div class="contact__field">
+                  <label class="contact__label" for="ContactEmail">{{ 'general.contact.email' | t }}*</label>
+                  <input
+                    type="email"
+                    id="ContactEmail"
+                    class="contact__input{% if form.errors contains 'email' %} contact__input--error{% endif %}"
+                    name="contact[email]"
+                    value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                    autocomplete="email"
+                    required
+                  >
+                </div>
+              </div>
+
+              <div class="contact__field">
+                <label class="contact__label" for="ContactPhone">{{ 'general.contact.phone' | t }}</label>
+                <input
+                  type="tel"
+                  id="ContactPhone"
+                  class="contact__input"
+                  name="contact[phone]"
+                  value="{% if form.phone %}{{ form.phone }}{% endif %}"
+                  autocomplete="tel"
+                >
+              </div>
+
+              <div class="contact__field">
+                <label class="contact__label" for="ContactMessage">{{ 'general.contact.message' | t }}*</label>
+                <textarea
+                  id="ContactMessage"
+                  class="contact__input contact__textarea"
+                  name="contact[body]"
+                  rows="6"
+                  required
+                >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+              </div>
+
+              <button type="submit" class="contact__submit">{{ 'general.contact.submit' | t }}</button>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      </div>
+    {%- else -%}
+      <h1 class="page__title">{{ page.title }}</h1>
+      <div class="page__content">{{ page.content }}</div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .page__inner {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: var(--section-spacing) var(--page-margin);
+  }
+
+  .page__title {
+    margin: 0;
+    font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  }
+
+  .page__content {
+    margin-block-start: 1.5rem;
+    max-width: 42rem;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .contact__header {
+    max-width: 36rem;
+    margin-block-end: 3rem;
+  }
+
+  .contact__eyebrow {
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.78rem;
+    opacity: 0.65;
+  }
+
+  .contact__description {
+    margin-block-start: 1rem;
+    font-size: 1.05rem;
+    opacity: 0.8;
+  }
+
+  .contact__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  @media screen and (min-width: 800px) {
+    .contact__grid {
+      grid-template-columns: 1fr 1.4fr;
+      gap: 4rem;
+    }
+  }
+
+  .contact__details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .contact__detail {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.98rem;
+  }
+
+  .contact__detail svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  .contact__detail--text {
+    opacity: 0.75;
+  }
+
+  .contact__social {
+    display: flex;
+    gap: 0.9rem;
+    margin-top: 0.5rem;
+  }
+
+  .contact__social svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .contact__field-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media screen and (min-width: 520px) {
+    .contact__field-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .contact__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .contact__label {
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+
+  .contact__input {
+    padding: 0.8rem 1rem;
+    border: var(--border-thickness) solid var(--color-border);
+    border-radius: var(--radius-input);
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 0.95rem;
+  }
+
+  .contact__input:focus {
+    outline: 2px solid var(--color-button);
+    outline-offset: 1px;
+  }
+
+  .contact__input--error {
+    border-color: #b3443c;
+  }
+
+  .contact__textarea {
+    resize: vertical;
+    min-height: 8rem;
+  }
+
+  .contact__submit {
+    align-self: flex-start;
+    margin-top: 0.5rem;
+    padding: 0.9rem 1.9rem;
+    border: none;
+    border-radius: var(--radius-button);
+    background: var(--color-button);
+    color: var(--color-button-label);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .contact__message {
+    padding: 0.9rem 1.1rem;
+    border-radius: var(--radius-input);
+    font-size: 0.92rem;
+  }
+
+  .contact__message--success {
+    background: color-mix(in srgb, var(--color-button) 16%, transparent);
+  }
+
+  .contact__message--error {
+    background: color-mix(in srgb, #b3443c 14%, transparent);
+    color: #8a342e;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.page",
-  "settings": []
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:general.contact"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:labels.contact_settings_info"
+    },
+    {
+      "type": "text",
+      "id": "contact_eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Got questions?"
+    },
+    {
+      "type": "richtext",
+      "id": "contact_description",
+      "label": "t:labels.description",
+      "default": "<p>Questions about a formula, your order, or your skin? We read every message.</p>"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "t:labels.email"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "t:labels.phone"
+    },
+    {
+      "type": "text",
+      "id": "contact_address",
+      "label": "t:labels.address"
+    },
+    {
+      "type": "text",
+      "id": "contact_hours",
+      "label": "t:labels.hours"
+    },
+    {
+      "type": "text",
+      "id": "contact_instagram_url",
+      "label": "t:labels.instagram_url"
+    },
+    {
+      "type": "text",
+      "id": "contact_facebook_url",
+      "label": "t:labels.facebook_url"
+    }
+  ]
 }
 {% endschema %}

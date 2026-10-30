@@ -25,6 +25,15 @@
       "email_placeholder": "Your email",
       "submit": "Subscribe",
       "success": "Thank you for subscribing."
+    },
+    "contact": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "submit": "Send message",
+      "success": "Thanks for reaching out — we'll get back to you soon.",
+      "error": "Something went wrong. Please check your details and try again."
     }
   },
   "404": {

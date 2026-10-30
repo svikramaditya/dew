@@ -11,7 +11,16 @@
   "sections": {
     "main": {
       "type": "page",
-      "settings": {}
+      "settings": {
+        "contact_eyebrow": "Got questions?",
+        "contact_description": "<p>Questions about a formula, your order, or your skin? We read every message and usually reply within a day.</p>",
+        "contact_email": "hello@dewskincare.com",
+        "contact_phone": "+1 (213) 555-0148",
+        "contact_address": "Los Angeles, CA",
+        "contact_hours": "Monday-Friday, 9am-5pm PT",
+        "contact_instagram_url": "https://instagram.com",
+        "contact_facebook_url": "https://facebook.com"
+      }
     }
   },
   "order": [

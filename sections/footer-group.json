@@ -14,7 +14,11 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "",
+        "contact_phone": "+1 (213) 555-0148",
+        "contact_email": "hello@dewskincare.com",
+        "contact_address": "Los Angeles, CA",
+        "instagram_url": "https://instagram.com",
+        "facebook_url": "https://facebook.com",
         "show_payment_icons": true
       }
     }
