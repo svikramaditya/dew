@@ -143,19 +143,19 @@
         "p1": {
           "type": "product",
           "settings": {
-            "product": "gid://shopify/product/15424239632604"
+            "product": "shopify://shopify/product/15424239632604"
           }
         },
         "p2": {
           "type": "product",
           "settings": {
-            "product": "gid://shopify/product/15424239730908"
+            "product": "shopify://shopify/product/15424239730908"
           }
         },
         "p3": {
           "type": "product",
           "settings": {
-            "product": "gid://shopify/product/15424239468764"
+            "product": "shopify://shopify/product/15424239468764"
           }
         }
       },
