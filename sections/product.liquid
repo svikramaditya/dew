@@ -237,8 +237,18 @@
     border-radius: 0;
   }
 
+  /*
+   * Absolutely positioned to fill .product__media-main (which carries
+   * the real aspect-ratio box) - without this, a block-level slide
+   * with no explicit height has nothing for the image's `height: 100%`
+   * to resolve against, so the image falls back to its own natural
+   * aspect ratio scaled to the available width instead of covering
+   * the frame, leaving blank space below it.
+   */
   .product__media-slide {
     display: none;
+    position: absolute;
+    inset: 0;
   }
 
   .product__media-slide.is-active {
@@ -247,6 +257,7 @@
 
   .product__inner--stacked .product__media-slide {
     display: block;
+    position: static;
     aspect-ratio: 4 / 5;
     border-radius: var(--radius-card);
     overflow: hidden;
