@@ -5,9 +5,7 @@
   endunless
   assign original_total = 0
   assign bundle_total = 0
-  assign debug_out = ''
   for block in section.blocks
-    assign debug_out = debug_out | append: '[' | append: block.settings.product | append: '|title=' | append: block.settings.product.title | append: '|class=' | append: block.settings.product.class | append: ']'
     assign item_compare_price = block.settings.product.compare_at_price | default: block.settings.product.price
     assign original_total = original_total | plus: item_compare_price
     assign bundle_total = bundle_total | plus: block.settings.product.price
@@ -30,7 +28,6 @@
       {%- if section.settings.description != blank -%}
         <p class="kit-bundle__description">{{ section.settings.description }}</p>
       {%- endif -%}
-      <p style="color:red;font-size:10px;word-break:break-all;">DEBUG: {{ debug_out }}</p>
 
       <ul class="kit-bundle__list">
         {%- for block in section.blocks -%}
