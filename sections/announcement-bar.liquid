@@ -1,6 +1,5 @@
-{%- if section.blocks.size == 0 and section.settings.show_social_icons == false -%}
+{%- unless section.blocks.size == 0 and section.settings.show_social_icons == false -%}
   {%- comment -%} Nothing configured yet -- stay invisible rather than render an empty bar. {%- endcomment -%}
-{%- else -%}
 <div class="announcement-bar color-{{ section.settings.color_scheme }} full-width">
   <div class="announcement-bar__inner">
     <div class="announcement-bar__social">
@@ -35,6 +34,7 @@
 {% if section.blocks.size > 1 %}
   <script src="{{ 'component-announcement-messages.js' | asset_url }}" defer="defer"></script>
 {% endif %}
+{%- endunless -%}
 
 {% stylesheet %}
   .announcement-bar__inner {
@@ -160,4 +160,3 @@
   "max_blocks": 5
 }
 {% endschema %}
-{%- endif -%}

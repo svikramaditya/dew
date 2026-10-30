@@ -15,35 +15,35 @@
       </ul>
     </div>
   </div>
-
-  {% stylesheet %}
-    .product-recs__inner {
-      max-width: var(--page-width);
-      margin: 0 auto;
-      padding: var(--section-spacing) var(--page-margin);
-    }
-
-    .product-recs__heading {
-      font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
-      margin: 0 0 2rem;
-    }
-
-    .product-recs__grid {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--grid-gap);
-    }
-
-    @media screen and (min-width: 700px) {
-      .product-recs__grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-  {% endstylesheet %}
 {%- endif -%}
+
+{% stylesheet %}
+  .product-recs__inner {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: var(--section-spacing) var(--page-margin);
+  }
+
+  .product-recs__heading {
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+    margin: 0 0 2rem;
+  }
+
+  .product-recs__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--grid-gap);
+  }
+
+  @media screen and (min-width: 700px) {
+    .product-recs__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

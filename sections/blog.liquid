@@ -22,7 +22,7 @@
               {%- if article.image -%}
                 {{ article.image | image_url: width: 700 | image_tag: loading: loading_strategy, alt: article.title, class: 'blog-card__image' }}
               {%- else -%}
-                {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg blog-card__image' }}
+                {%- render 'dew-illustration', variant: 'leaf', class: 'blog-card__illustration' -%}
               {%- endif -%}
             </a>
             <div class="blog-card__content">
@@ -81,11 +81,23 @@
     background: color-mix(in srgb, var(--color-border) 40%, transparent);
   }
 
-  .blog-card__image,
-  .blog-card__media svg {
+  .blog-card__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .blog-card__media:has(.blog-card__illustration) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .blog-card__illustration {
+    width: 32%;
+    max-width: 6rem;
+    height: auto;
+    color: color-mix(in srgb, var(--color-text) 45%, transparent);
   }
 
   .blog-card__content {
