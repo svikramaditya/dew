@@ -143,19 +143,19 @@
         "p1": {
           "type": "product",
           "settings": {
-            "product": "gid://shopify/product/15424239632604"
+            "product": "gentle-milk-cleanser"
           }
         },
         "p2": {
           "type": "product",
           "settings": {
-            "product": "gid://shopify/product/15424239730908"
+            "product": "hyaluronic-acid-plumping-serum"
           }
         },
         "p3": {
           "type": "product",
           "settings": {
-            "product": "gid://shopify/product/15424239468764"
+            "product": "rosewater-hydrating-mist"
           }
         }
       },
