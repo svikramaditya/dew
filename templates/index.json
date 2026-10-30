@@ -137,6 +137,7 @@
       "type": "video",
       "settings": {
         "color_scheme": "scheme-3",
+        "cover_image": "shopify://shop_images/photo-1550572017-4b7a301b9d81.jpg",
         "eyebrow": "Our story",
         "heading": "Begins with a drop",
         "button_label": "Learn more about us",
