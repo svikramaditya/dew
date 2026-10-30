@@ -17,7 +17,7 @@
       {%- if section.settings.image != blank -%}
         {{ section.settings.image | image_url: width: 1200 | image_tag: loading: loading_strategy, alt: section.settings.heading, class: 'kit-bundle__image' }}
       {%- else -%}
-        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg kit-bundle__image' }}
+        {%- render 'dew-illustration', variant: 'routine-scene', class: 'kit-bundle__illustration' -%}
       {%- endif -%}
     </div>
 
@@ -85,11 +85,24 @@
     overflow: hidden;
   }
 
-  .kit-bundle__image,
-  .kit-bundle__media svg {
+  .kit-bundle__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .kit-bundle__media:has(.kit-bundle__illustration) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--color-border) 45%, transparent);
+  }
+
+  .kit-bundle__illustration {
+    width: 55%;
+    max-width: 16rem;
+    height: auto;
+    color: color-mix(in srgb, var(--color-text) 55%, transparent);
   }
 
   .kit-bundle__heading {

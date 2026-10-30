@@ -1,0 +1,59 @@
+{% comment %}
+  Shared line-art artwork, used as fallback wherever a section's image
+  falls back to Shopify's generic 'lifestyle-1' placeholder_svg_tag --
+  a scattered collage of unrelated accessory icons (bags, shoes,
+  sunglasses) that has nothing to do with a skincare brand. Single
+  stroke weight, currentColor, so each renders correctly against
+  whatever color scheme its section uses. Real photography/video
+  always wins once a merchant uploads one; this only fills the empty
+  state before they do.
+
+  Accepts:
+  - variant (string, required): dew-drop | routine-scene | leaf
+  - class (string, optional): extra class for section-specific sizing
+{% endcomment %}
+{%- liquid
+  assign icon_class = 'dew-illustration'
+  if class != blank
+    assign icon_class = icon_class | append: ' ' | append: class
+  endif
+-%}
+{%- case variant -%}
+  {%- when 'dew-drop' -%}
+    {%- comment -%}
+      The brand's own motif: a single drop with the ripple rings it
+      would cast on water -- echoes the water-ripple effect already
+      built into the real hero image.
+    {%- endcomment -%}
+    <svg class="{{ icon_class }}" viewBox="0 0 400 400" fill="none" aria-hidden="true" focusable="false">
+      <path d="M200 90 C 230 150 270 205 270 250 A 70 70 0 1 1 130 250 C 130 205 170 150 200 90 Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <ellipse cx="200" cy="330" rx="95" ry="13" stroke="currentColor" stroke-width="2.5" opacity="0.55"/>
+      <ellipse cx="200" cy="330" rx="140" ry="20" stroke="currentColor" stroke-width="2.5" opacity="0.3"/>
+      <ellipse cx="200" cy="330" rx="185" ry="27" stroke="currentColor" stroke-width="2.5" opacity="0.15"/>
+    </svg>
+  {%- when 'leaf' -%}
+    <svg class="{{ icon_class }}" viewBox="0 0 400 400" fill="none" aria-hidden="true" focusable="false">
+      <path d="M200 110 C 270 145 295 225 200 310 C 105 225 130 145 200 110 Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M200 130 L200 290" stroke="currentColor" stroke-width="2"/>
+      <path d="M200 170 L230 190 M200 220 L170 240" stroke="currentColor" stroke-width="1.6"/>
+    </svg>
+  {%- else -%}
+    {%- comment -%} routine-scene (default): jar + dropper bottle + leaf, grouped {%- endcomment -%}
+    <svg class="{{ icon_class }}" viewBox="0 0 400 400" fill="none" aria-hidden="true" focusable="false">
+      <ellipse cx="200" cy="345" rx="150" ry="14" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
+
+      <!-- cream jar -->
+      <rect x="85" y="215" width="110" height="100" rx="14" stroke="currentColor" stroke-width="3"/>
+      <rect x="95" y="188" width="90" height="27" rx="8" stroke="currentColor" stroke-width="3"/>
+      <ellipse cx="140" cy="188" rx="45" ry="10" stroke="currentColor" stroke-width="3"/>
+
+      <!-- dropper bottle -->
+      <rect x="245" y="195" width="60" height="120" rx="10" stroke="currentColor" stroke-width="3"/>
+      <rect x="262" y="150" width="26" height="45" stroke="currentColor" stroke-width="3"/>
+      <path d="M256 128 L294 128 L284 150 L266 150 Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+
+      <!-- sprig -->
+      <path d="M205 240 C 225 250 232 275 205 300 C 178 275 185 250 205 240 Z" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
+      <line x1="205" y1="248" x2="205" y2="292" stroke="currentColor" stroke-width="1.6"/>
+    </svg>
+{%- endcase -%}
