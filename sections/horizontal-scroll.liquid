@@ -51,6 +51,10 @@
     margin: 0 auto;
     padding: 0 var(--page-margin);
     width: 100%;
+    /* Set here, not on .h-scroll__description's own margin: a global
+       reset zeroes a paragraph's margin-bottom when it's the last child
+       of its container, which this one always is. */
+    padding-bottom: 2rem;
   }
 
   .h-scroll__heading {
@@ -62,12 +66,14 @@
     font-size: 1rem;
     opacity: 0.75;
     max-width: 32rem;
-    margin: 0 0 2rem;
+    margin: 0;
   }
 
   .h-scroll__track {
     display: flex;
     gap: var(--grid-gap);
+    max-width: var(--page-width);
+    margin: 0 auto;
     padding: 0 var(--page-margin);
     will-change: transform;
   }
