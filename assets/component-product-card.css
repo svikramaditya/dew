@@ -239,13 +239,23 @@
   padding: 2rem;
   opacity: 0;
   transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/*
+ * The grid belongs on __body (the actual wrapper around __media and
+ * __info), not __panel - __body is __panel's only non-absolutely-
+ * positioned child, so a grid on __panel just placed that one div in
+ * column 1 and left column 2 empty, while __media/__info stacked
+ * inside it in normal block flow instead of sitting side by side.
+ */
+.quick-view-modal__body {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
 }
 
 @media screen and (min-width: 700px) {
-  .quick-view-modal__panel {
+  .quick-view-modal__body {
     grid-template-columns: 1fr 1fr;
   }
 }
