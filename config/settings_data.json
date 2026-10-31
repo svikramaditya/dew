@@ -53,7 +53,8 @@
         }
       },
       "enable_scroll_animations": true,
-      "enable_lazy_loading": true
+      "enable_lazy_loading": true,
+      "newsletter_popup_image": "shopify://shop_images/photo-1714479140002-62d1824fffb5_32cf536d-064e-4851-b32d-e06f70dfb9d8.jpg"
     }
   }
 }
