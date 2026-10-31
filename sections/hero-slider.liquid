@@ -168,10 +168,24 @@
     }
   }
 
+  /*
+   * Absolutely positioned (filling .hero-slider__media, which is
+   * position: relative) rather than width/height: 100% in normal
+   * flow - a percentage height needs a definite parent height to
+   * resolve against, and .hero-slider__media's own height comes
+   * from the grid row via align-items: stretch, which isn't settled
+   * until the row's content contributions are measured. Leaving
+   * these in-flow made that circular: the browser fell back to each
+   * element's natural/intrinsic size for the measurement, so the
+   * photo's own aspect ratio ended up driving the whole hero's
+   * height instead of the configured one.
+   */
   .hero-slider__image,
   .hero-slider__video,
   .hero-slider__ripple,
   .hero-slider__media svg {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -179,7 +193,6 @@
   }
 
   .hero-slider__ripple {
-    position: relative;
     overflow: hidden;
   }
 
