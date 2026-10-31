@@ -15,6 +15,7 @@
   data-transition="{{ section.settings.transition_style }}"
   data-autoplay="{{ section.settings.autoplay }}"
   data-interval="{{ section.settings.slide_interval | times: 1000 }}"
+  style="--hero-slider-height: {{ section.settings.height | default: 440 }}px;"
 >
   <div class="hero-slider__track">
     {%- for block in section.blocks -%}
@@ -108,7 +109,6 @@
     display: grid;
     grid-template-columns: 1fr;
     align-items: center;
-    min-height: 32rem;
   }
 
   .hero-slider[data-transition='fade'] .hero-slider__slide {
@@ -132,6 +132,16 @@
   @media screen and (min-width: 900px) {
     .hero-slider__slide {
       grid-template-columns: 1fr 1fr;
+      /*
+       * align-items: stretch (overriding the base rule's "center")
+       * so the single grid row actually takes on the container's
+       * min-height below - without it, the row sizes to content
+       * instead, .hero-slider__media's `height: 100%` has nothing
+       * definite to resolve against, and the image falls back to
+       * its own natural size instead of filling the hero.
+       */
+      align-items: stretch;
+      min-height: var(--hero-slider-height, 440px);
     }
   }
 
@@ -144,15 +154,38 @@
   @media screen and (min-width: 900px) {
     .hero-slider__media {
       aspect-ratio: auto;
-      height: 100%;
-      min-height: 32rem;
+      /*
+       * No explicit height here - the parent grid's align-items:
+       * stretch already fills this item to the row's height. An
+       * explicit `height: 100%` instead needs a definite parent
+       * height to resolve against, which the row doesn't have until
+       * it's sized (that's exactly what stretch is for) - a
+       * circular reference that made the browser fall back to this
+       * element's natural content size (the photo's own intrinsic
+       * aspect ratio) instead, ballooning the whole hero's height.
+       */
+      min-height: var(--hero-slider-height, 440px);
     }
   }
 
+  /*
+   * Absolutely positioned (filling .hero-slider__media, which is
+   * position: relative) rather than width/height: 100% in normal
+   * flow - a percentage height needs a definite parent height to
+   * resolve against, and .hero-slider__media's own height comes
+   * from the grid row via align-items: stretch, which isn't settled
+   * until the row's content contributions are measured. Leaving
+   * these in-flow made that circular: the browser fell back to each
+   * element's natural/intrinsic size for the measurement, so the
+   * photo's own aspect ratio ended up driving the whole hero's
+   * height instead of the configured one.
+   */
   .hero-slider__image,
   .hero-slider__video,
   .hero-slider__ripple,
   .hero-slider__media svg {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -160,7 +193,6 @@
   }
 
   .hero-slider__ripple {
-    position: relative;
     overflow: hidden;
   }
 
@@ -175,6 +207,10 @@
       grid-row: 1;
       padding: 2.5rem min(4rem, var(--page-margin));
       justify-self: center;
+      /* Container switches to align-items: stretch at this width so
+         .hero-slider__media can fill the row - opt this column back
+         into vertically-centered content individually. */
+      align-self: center;
     }
   }
 
@@ -294,6 +330,17 @@
 {
   "name": "t:general.hero",
   "settings": [
+    {
+      "type": "range",
+      "id": "height",
+      "label": "t:labels.height",
+      "info": "t:labels.height_info",
+      "min": 320,
+      "max": 640,
+      "step": 20,
+      "unit": "px",
+      "default": 440
+    },
     {
       "type": "select",
       "id": "transition_style",
