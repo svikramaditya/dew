@@ -23,7 +23,25 @@
             "heading": "Skin care that feels like a ritual",
             "description": "Clean, considered formulas made with real ingredients -- nothing in here you can't pronounce.",
             "button_label": "Shop all",
-            "button_link": "/collections/all"
+            "button_link": "/collections/all",
+            "secondary_button_label": "",
+            "secondary_button_link": ""
+          }
+        },
+        "slide_LCKjRg": {
+          "type": "slide",
+          "settings": {
+            "color_scheme": "scheme-1",
+            "media_type": "image",
+            "image": "shopify://shop_images/photo-1714479140002-62d1824fffb5_32cf536d-064e-4851-b32d-e06f70dfb9d8.jpg",
+            "enable_ripple": true,
+            "eyebrow": "",
+            "heading": "Skin care that feels like a ritual",
+            "description": "",
+            "button_label": "",
+            "button_link": "",
+            "secondary_button_label": "",
+            "secondary_button_link": ""
           }
         },
         "slide-2": {
@@ -45,9 +63,11 @@
       },
       "block_order": [
         "slide-1",
+        "slide_LCKjRg",
         "slide-2"
       ],
       "settings": {
+        "height": 440,
         "transition_style": "fade",
         "autoplay": true,
         "slide_interval": 6
@@ -69,7 +89,9 @@
     "philosophy": {
       "type": "philosophy",
       "settings": {
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-1",
+        "eyebrow": "Our philosophy",
+        "text": "We believe skincare should feel intuitive, not complicated. Our formulas combine modern dermatological research with gentle, skin-supportive ingredients -- crafted for real routines and real results."
       }
     },
     "horizontal-scroll": {
@@ -80,48 +102,6 @@
         "description": "Keep scrolling -- every step of the routine, in one pass.",
         "collection": "all",
         "products_to_show": 6
-      }
-    },
-    "faq": {
-      "type": "faq",
-      "blocks": {
-        "q1": {
-          "type": "question",
-          "settings": {
-            "question": "Can I use this serum with retinol?",
-            "answer": "We recommend alternating nights. Use the serum on one night, and retinol on another, to avoid irritation."
-          }
-        },
-        "q2": {
-          "type": "question",
-          "settings": {
-            "question": "Is it safe for sensitive skin?",
-            "answer": "Yes -- every formula is fragrance-free and patch-tested, but we always recommend a 24-hour patch test for new products."
-          }
-        },
-        "q3": {
-          "type": "question",
-          "settings": {
-            "question": "How soon will I see results?",
-            "answer": "Most people notice a difference in texture within 2-3 weeks of consistent use, with fuller results around 8 weeks."
-          }
-        },
-        "q4": {
-          "type": "question",
-          "settings": {
-            "question": "Do I need to wear sunscreen with this product?",
-            "answer": "Yes, especially with active ingredients like vitamin C or retinol -- always finish your morning routine with SPF."
-          }
-        }
-      },
-      "block_order": [
-        "q1",
-        "q2",
-        "q3",
-        "q4"
-      ],
-      "settings": {
-        "color_scheme": "scheme-1"
       }
     },
     "freshly-picked": {
@@ -178,6 +158,52 @@
         "heading": "Begins with a drop",
         "button_label": "Learn more about us",
         "button_link": "/pages/about"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Can I use this serum with retinol?",
+            "answer": "We recommend alternating nights. Use the serum on one night, and retinol on another, to avoid irritation."
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Is it safe for sensitive skin?",
+            "answer": "Yes -- every formula is fragrance-free and patch-tested, but we always recommend a 24-hour patch test for new products."
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "How soon will I see results?",
+            "answer": "Most people notice a difference in texture within 2-3 weeks of consistent use, with fuller results around 8 weeks."
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Do I need to wear sunscreen with this product?",
+            "answer": "Yes, especially with active ingredients like vitamin C or retinol -- always finish your morning routine with SPF."
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "eyebrow": "Got questions?",
+        "heading": "Everything you need to know",
+        "link_label": "Explore more FAQ",
+        "link_url": ""
       }
     }
   },
