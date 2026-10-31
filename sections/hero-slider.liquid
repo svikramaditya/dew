@@ -132,6 +132,15 @@
   @media screen and (min-width: 900px) {
     .hero-slider__slide {
       grid-template-columns: 1fr 1fr;
+      /*
+       * align-items: stretch (overriding the base rule's "center")
+       * so the single grid row actually takes on the container's
+       * min-height below - without it, the row sizes to content
+       * instead, .hero-slider__media's `height: 100%` has nothing
+       * definite to resolve against, and the image falls back to
+       * its own natural size instead of filling the hero.
+       */
+      align-items: stretch;
       min-height: var(--hero-slider-height, 440px);
     }
   }
@@ -176,6 +185,10 @@
       grid-row: 1;
       padding: 2.5rem min(4rem, var(--page-margin));
       justify-self: center;
+      /* Container switches to align-items: stretch at this width so
+         .hero-slider__media can fill the row - opt this column back
+         into vertically-centered content individually. */
+      align-self: center;
     }
   }
 
