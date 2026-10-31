@@ -109,6 +109,13 @@
     display: grid;
     grid-template-columns: 1fr;
     align-items: center;
+    /*
+     * First-fold fit: fill the viewport below the header by default,
+     * but never shrink below the merchant's configured height (a
+     * floor for short viewports / landscape phones where a full
+     * 100svh - header would be too cramped for the content).
+     */
+    min-height: max(var(--hero-slider-height, 440px), calc(100svh - var(--header-height, 0px)));
   }
 
   .hero-slider[data-transition='fade'] .hero-slider__slide {
@@ -141,7 +148,6 @@
        * its own natural size instead of filling the hero.
        */
       align-items: stretch;
-      min-height: var(--hero-slider-height, 440px);
     }
   }
 

@@ -79,6 +79,23 @@
 {% render 'search-drawer' %}
 {% render 'cart-drawer' %}
 
+<script>
+  (() => {
+    // Sum every section in the header group (announcement bar + header,
+    // and anything else a merchant adds there) so the hero's first-fold
+    // calc accounts for the full chrome above it, not just the header.
+    const chrome = Array.from(document.querySelectorAll('.shopify-section-group-header-group'));
+    if (!chrome.length) return;
+    const setHeaderHeight = () => {
+      const total = chrome.reduce((sum, el) => sum + el.offsetHeight, 0);
+      document.documentElement.style.setProperty('--header-height', `${total}px`);
+    };
+    setHeaderHeight();
+    const observer = new ResizeObserver(setHeaderHeight);
+    chrome.forEach((el) => observer.observe(el));
+  })();
+</script>
+
 <script src="{{ 'component-mobile-menu.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'component-search-drawer.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'component-cart-drawer.js' | asset_url }}" defer="defer"></script>
