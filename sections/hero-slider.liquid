@@ -154,7 +154,16 @@
   @media screen and (min-width: 900px) {
     .hero-slider__media {
       aspect-ratio: auto;
-      height: 100%;
+      /*
+       * No explicit height here - the parent grid's align-items:
+       * stretch already fills this item to the row's height. An
+       * explicit `height: 100%` instead needs a definite parent
+       * height to resolve against, which the row doesn't have until
+       * it's sized (that's exactly what stretch is for) - a
+       * circular reference that made the browser fall back to this
+       * element's natural content size (the photo's own intrinsic
+       * aspect ratio) instead, ballooning the whole hero's height.
+       */
       min-height: var(--hero-slider-height, 440px);
     }
   }
