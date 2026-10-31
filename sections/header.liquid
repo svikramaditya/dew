@@ -81,13 +81,18 @@
 
 <script>
   (() => {
-    const header = document.querySelector('.header');
-    if (!header) return;
+    // Sum every section in the header group (announcement bar + header,
+    // and anything else a merchant adds there) so the hero's first-fold
+    // calc accounts for the full chrome above it, not just the header.
+    const chrome = Array.from(document.querySelectorAll('.shopify-section-group-header-group'));
+    if (!chrome.length) return;
     const setHeaderHeight = () => {
-      document.documentElement.style.setProperty('--header-height', `${header.offsetHeight}px`);
+      const total = chrome.reduce((sum, el) => sum + el.offsetHeight, 0);
+      document.documentElement.style.setProperty('--header-height', `${total}px`);
     };
     setHeaderHeight();
-    new ResizeObserver(setHeaderHeight).observe(header);
+    const observer = new ResizeObserver(setHeaderHeight);
+    chrome.forEach((el) => observer.observe(el));
   })();
 </script>
 
